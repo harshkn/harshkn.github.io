@@ -1,0 +1,149 @@
+---
+layout: post
+title: Static Analysis
+date: 2014-03-19 05:49:00.000000000 -04:00
+type: post
+published: true
+status: publish
+categories:
+- Research
+tags:
+- surveyman
+meta:
+  _edit_last: '20775'
+author:
+  login: etosch
+  email: etosch@cns.umass.edu
+  display_name: Emma Tosch
+  first_name: Emma
+  last_name: Tosch
+---
+<p>Tell a PL researcher that you have a new programming language and one of the first things they want to know is whether you can do static analysis on it. Lucky for us, we can! But first, some background in this space:</p>
+<h3>Prior work on static analysis for surveys</h3>
+<p>I mentioned <a href="http://blogs.umass.edu/etosch/2014/03/11/on-keeping-the-survey-a-dag/">earlier</a> that there is some <a href="http://plt.eecs.northwestern.edu/matthews-phd.pdf">prior work</a> on using programming languages to address survey problems.   </p>
+<p>Static analysis in Topsl is constrained by the fact that Topsl permits users to define questions whose text depends on the answers to previous questions. Matthews is primarily concerned that each question is asked. While it can support randomization, this feature belongs to the containing language, Scheme, and so is not considered part of of the Topsl core. Although the 2004 paper mentions randomization as a feature that can be implemented, there is no formal treatment in any of the three Topsl-related publications.</p>
+<p>If we also consider type-checking answer fields or enforce constraints on responses as static analysis, then most online survey tools, Blaise, QPL, and probably many more tools and services perform some kind of static analysis.</p>
+<h3 id="static_analysis">Static Analysis in SurveyMan</h3>
+<p>Surveys are interpreted by a finite state machine implemented in Javascript. To ensure that we don't cause undefined behavior, we must check that the csv is well-formed. After parsing, the SurveyMan runtime performs the following checks:</p>
+<ul>
+<li><b>Forward Branch</b> Since we <a href="http://blogs.umass.edu/etosch/2014/03/11/on-keeping-the-survey-a-dag/">require the survey to be a DAG</a>, all branching must be forward. We can do this easily by comparing branch destination ids with the ids of the branch question's containing block. This check takes time linear in the block's depth.</li>
+<li><b>Top Level Branch</b> At the moment, we only allow branching to <a href="http://blogs.umass.edu/etosch/2014/03/18/survey-language-essentials/#control_flow">top level blocks</a>. This check is constant. </li>
+<li><b>Consistent Branch Paradigms</b> Having one "true" branch question per top level block is critically important for our survey language. Every block has a flag for its "branch paradigm." This flag indicates whether there is no branching in the block, one branch question, or whether the block should emulate sampling behavior. This check ensures that for every block, if it has a parent or siblings the following relations hold:
+<p id="lattice">
+[table id=1 /]</p>
+<p>We use the following classification algorithm to assign branch paradigms:<br />
+<code id="allQuestions"><br />
+function getAllQuestionsForBlock<br />
+&nbsp; input : a block<br />
+&nbsp; output : a list of questions<br />
+begin<br />
+&nbsp; questions &lt;- this block&#039;s questions<br />
+&nbsp; if this block&#039;s branch paradigm is SAMPLE<br />
+&nbsp; &nbsp; q &lt;- randomly select one of questions<br />
+&nbsp; &nbsp; return [ q ]<br />
+&nbsp; else<br />
+&nbsp; &nbsp; qList &lt;- shuffled questions<br />
+&nbsp; &nbsp; for each subblock b in this block<br />
+&nbsp; &nbsp; begin<br />
+&nbsp; &nbsp; &nbsp; bqList &lt;- getAllQuestionsForBlock(b)<br />
+&nbsp; &nbsp; &nbsp; append bqList to qList<br />
+&nbsp; &nbsp; end<br />
+&nbsp; &nbsp; return qList<br />
+&nbsp; fi<br />
+end<br />
+</code><br />
+<code><br />
+function classifyBlockParadigm<br />
+&nbsp; input : a block<br />
+&nbsp; output : one of { NONE, ONE, SAMPLE }<br />
+begin<br />
+&nbsp; questions &lt;- this block&#039;s questions<br />
+&nbsp; subblocks &lt;- this block&#039;s subblocks<br />
+&nbsp; if every q in questions has a branch map<br />
+&nbsp; &nbsp; branchMap &lt;- select one branch map<br />
+&nbsp; &nbsp; if every target block in branchMap is NULL<br />
+&nbsp; &nbsp; &nbsp; return SAMPLE<br />
+&nbsp; &nbsp; else<br />
+&nbsp; &nbsp; &nbsp; return ONE<br />
+&nbsp; else if one q in questions has a branch map<br />
+&nbsp; &nbsp; return ONE<br />
+&nbsp; else if there is no q in questions having a branch map<br />
+&nbsp; &nbsp; for each b in subblocks<br />
+&nbsp; &nbsp; begin<br />
+&nbsp; &nbsp; &nbsp; paradigm &lt;- classifyBlockParadigm(b)<br />
+&nbsp; &nbsp; &nbsp; if paradigm is ONE<br />
+&nbsp; &nbsp; &nbsp; &nbsp; return ONE<br />
+&nbsp; &nbsp; end<br />
+&nbsp; &nbsp; return NONE<br />
+&nbsp; fi<br />
+end<br />
+</code><br />
+The ONE branch paradigm gets propagated up the block hierarchy and pushes constraints down the block hierarchy. The SAMPLE branch paradigm pushes constraints down the block hierarchy, but has no impact on parent blocks. Finally, NONE is the weakest paradigm, as it imposes no constraints on its parents or children. All blocks are set to NONE by default and are overwritten by ONE when appropriate.
+</li>
+<li><b>No Duplicates</b> We check the features of each question to ensure that there are no duplicate questions. Duplicates can creep in if surveys are constructed programmatically.</li>
+<li><b>Compactness</b> Checks whether we have any gaps in the order of blocks. Block ordering begins at 1. This check is linear in the total number of blocks. (This check should be deprecated, due to randomized blocks.)</li>
+<li><b>No branching to or from top level randomized blocks</b> We can think of the survey as a container for blocks, and blocks as containers for questions and other blocks. The top-level blocks are those immediately contained by the survey. While we permit branching from randomizable blocks that are sub-blocks of some containing block, we do not allow branching to or from top-level randomized blocks. The check for whether we have branched from a top-level block is linear in the number of top-level blocks. The check for whether we try branching to a top-level randomizable block is linear in the number of questions.
+</li>
+<li><b>Branch map uniformity</b> If a block has more than one branch question, then all of its questions must be branch questions. The options and their targets are expected to be aligned. In the notation we used in a <a href="http://blogs.umass.edu/etosch/2014/03/18/survey-language-essentials/">previous post</a>, for a survey csv $$S$$, if one question, $$q_1$$ in the block spans indices $$i,...,j$$ and another question $$q_2$$ spans indices $$k,...,l$$, then we expect $$S[BLOCK][i] = S[BLOCK][k] \wedge ... \wedge S[BLOCK][j] = S[BLOCK][l]$$.
+</li>
+<li><b>Exclusive Branching</b> Branching is only permitted on questions where <small>EXCLUSIVE</small> is true.
+</li>
+</ul>
+<p>The above are required for correctness of the input program. We also report back the following information, which can be used to estimate some of the dynamic behavior of the survey:</p>
+<ul>
+<li><b>Maximum Entropy</b><br />
+For a survey of $$n$$ questions each having $$m_i$$ responses, we can trivially obtain a gross upper bound on the entropy on the survey : $$n \log_2 (\text{max}(\lbrace m_i : 1 \leq i \leq n \rbrace))$$.
+</li>
+<li><b>Path Lengths</b>
+<ul>
+<li>
+<p><em>Minimum Path Length</em> Branching in surveys is typically related to some kind of division in the underlying population. In the previous post, we showed how branching could be used to run two versions of a survey at the same time. More often branching is used to restrict questions by relevance. It will be appropriate for some subpopulations to see certain questions, but not others.</p>
+<p>When surveys have sufficient branching, it may be possible for some respondents to answer far fewer questions than the survey designer intended -- they may "short circuit" the survey. Sometimes this is by design; if we are running a survey but are only interested in curly-haired respondents, we have no way to screen the population over the web. We may design the survey so that answering "no" to "Do you have curly hair?" sends the respondent straight to the end. In other cases, this is not the intended effect and is either a typographical error or is a case of poor survey design.</p>
+<p>We can compute minimum path length using a greedy algorithm:<br />
+<code id="minPath"><br />
+function minPathLength<br />
+&nbsp; input : survey<br />
+&nbsp; output : minimum path length through the survey<br />
+begin<br />
+&nbsp; size &lt;- 0<br />
+&nbsp; randomizableBlocks &lt;- randomizable top level blocks<br />
+&nbsp; staticBlocks &lt;- static top level blocks<br />
+&nbsp; branchDestination &lt;- stores block that we will branch to<br />
+&nbsp; for block b in randomizableBlocks<br />
+&nbsp; begin<br />
+&nbsp; &nbsp; size &lt;- size + length(getAllQuestionsForBlock(b))<br />
+&nbsp; end<br />
+&nbsp; for block b in staticBlocks<br />
+&nbsp; begin<br />
+&nbsp; &nbsp; paradigm &lt;- b&#039;s branch paradigm<br />
+&nbsp; &nbsp; if branchDestination is initialized but b is not branchDestination<br />
+&nbsp; &nbsp; &nbsp; continue<br />
+&nbsp; &nbsp; fi<br />
+&nbsp; &nbsp; size &lt;- size + length(getAllQuestionsForBlock(b))<br />
+&nbsp; &nbsp; if branchDestination is initialized and set to b<br />
+&nbsp; &nbsp; &nbsp; unset branchDestination<br />
+&nbsp; &nbsp; fi<br />
+&nbsp; &nbsp; if paradigm = ONE<br />
+&nbsp; &nbsp; &nbsp; branchMapDestinations &lt;- b&#039;s branch question&#039;s branch map values<br />
+&nbsp; &nbsp; &nbsp; possibleBlockDestinations &lt;- sort branchMapDestinations ascending<br />
+&nbsp; &nbsp; &nbsp; branchDestination &lt;- last(possibleBlockDestinations)<br />
+&nbsp; &nbsp; fi<br />
+&nbsp; end<br />
+&nbsp; return size<br />
+end<br />
+</code></p>
+</li>
+<li>
+<p><em>Maximum Path Length</em> Maximum path length can be used to estimate breakoff. This information may also be of interest to the survey designer -- surveys that are too long may require additional analysis for inattentive and lazy responses.</p>
+<p> Maximum path length is computed using almost exactly the same algorithm as min path length, except we choose the first block in the list of branch targets, rather than the last.</p>
+<p> We verified these algorithms empirically by simulating 1,000 random respondents and returning the minimum path.</p>
+</li>
+<li>
+<p><em>Average Path Length</em> Backends such as AMT require the requester to provide a time limit on surveys and a payment. While we currently <a href="http://blogs.umass.edu/etosch/2014/03/14/the-pricing-problem-in-surveyman/">cannot compute the optimal payment</a> in SurveyMan, we can use the average path length through the survey to estimate the time it would take to complete, and from that compute the baseline payment. </p>
+<p> The average path length is computed empirically. We have implemented a random respondent that chooses paths on the basis of positional preferences. One of the profiles implemented is a Uniform respondent; this profile simply selects one of the options with uniform probability over the total possible options. We run 5,000 iterations of this respondent to compute the average path length. </p>
+<p>
+Note that average path length is the average over possible paths; the true average path length will depend upon the preferences of the underlying population.</p>
+</li>
+</ul>
+</li>
+</ul>

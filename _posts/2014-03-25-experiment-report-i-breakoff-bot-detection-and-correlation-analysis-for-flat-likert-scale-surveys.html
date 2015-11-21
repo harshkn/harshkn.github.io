@@ -1,0 +1,406 @@
+---
+layout: post
+title: 'Experiment Report I : Breakoff, Bot Detection, and Correlation Analysis for
+  Flat, Likert-scale Surveys'
+date: 2014-03-25 07:41:55.000000000 -04:00
+type: post
+published: true
+status: publish
+categories:
+- Research
+tags:
+- surveyman
+meta:
+  _edit_last: '20775'
+author:
+  login: etosch
+  email: etosch@cns.umass.edu
+  display_name: Emma Tosch
+  first_name: Emma
+  last_name: Tosch
+---
+<p>We ran a survey previously conducted by Brian Smith four times, to test our techniques against a gold-standard data set.</p>
+<table>
+<tr>
+<td>Date launched</td>
+<td>Time of Day launched (EST)</td>
+<td>Total<br /> Responses</td>
+<td>Unique<br />Respondents</td>
+<td>Breakoff?</td>
+</tr>
+<tr>
+<td>Tue Sep 17 2013</td>
+<td>Morning 9:53:35 AM EST</td>
+<td>43</td>
+<td>38</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Fri Nov 15 2013</td>
+<td>Night</td>
+<td>90</td>
+<td>67</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Fri Jan 10 2013</td>
+<td>Morning</td>
+<td>148</td>
+<td>129</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Thu Mar 13 2014</td>
+<td>Night 11:49:18 PM EST</td>
+<td>157</td>
+<td>157</td>
+<td>Yes</td>
+</tr>
+</table>
+<p>This survey consists of three blocks. The first block asks demographic questions : age and whether the respondent is a native speaker of English. The second block contains 96 Likert-scale questions. The final block consists of one freetext question, asking the respondent to provide any feedback they might have about the survey. </p>
+<p>Each of the 96 questions in the second block asks the respondent to read aloud an English word suffixed with either of the pairs "-thon/-athon" or "licious/-alicious" and judge which sounds more like an English word.</p>
+<p><a href="http://blogs.umass.edu/etosch/files/2014/03/Screen-Shot-2014-03-24-at-7.02.27-PM.png"><img src="{{ site.baseurl }}/assets/Screen-Shot-2014-03-24-at-7.02.27-PM-300x100.png" alt="Screen Shot 2014-03-24 at 7.02.27 PM" width="300" height="100" class="aligncenter size-medium wp-image-930" /></a></p>
+<h3>First Run</h3>
+<p>The first time we ran the survey was early in SurveyMan's development. We had not yet devised a way to measure breakoff and had no quality control mechanisms. Question and option position were not returned We sent the data we collected to Joe Pater and Brian Smith. Brian reported back :</p>
+<blockquote><p>
+The results don't look amazing, but this is also not much data compared to the last experiment. This one contains six items for each group, and only 26 speakers (cf. to 107 speakers and 10 items for each group in the Language paper). </p>
+<p>Also, these distributions are *much* closer to 50-50 than the older results were. The fact that -athon is only getting 60% in the final-stress context is kind of shocking, given that it gets 90% schwa in my last experiment and the corpus data. Some good news though -- the finding that schwa is more likely in -(a)thon than -(a)licious is repeated in the MTurk data.</p>
+<p>Recall that the predictions of the Language-wide Constraints Hypothesis are that:<br />
+1. final stress (Final) should be greater than non-final stress (noFinal), for all contexts. This prediction looks like it obtains here.<br />
+2. noRR should be greater than RR for -(a)licious, but not -(a)thon. Less great here. We find an effect for -thon, and a weaker effect for -licious.</p>
+<p>licious (proportion schwaful)</p>
+<p>             noRR        RR<br />
+Final   0.5276074 0.5182927<br />
+noFinal 0.4887218 0.5031056</p>
+<p>thon (proportion schwaful)</p>
+<p>             noRR        RR<br />
+Final   0.5950920 0.5670732<br />
+noFinal 0.5522388 0.4938272
+</p></blockquote>
+<p>Our colleagues felt that this made a strong case for automating some quality control. </p>
+<h3>Second Run</h3>
+<p>The second time we ran this experiment, we permitted breakoff and used a Mechanical Turk qualification to screen respondents. We required that respondents have completed at least one HIT and have an approval rate of at least 80% (this is actually quite a low approval rate by AMT standards). We asked respondents to refrain from accepting this HIT twice, but did not reject their work if they did so. Although we could have used qualifications to screen respondents on the basis of country, we instead permitted non-native speakers to answer, and then screened them from our analysis. In future versions, we would recommend making the native speaker question a branch question instead. </p>
+<p>We performed three types of analyses on this second run of the survey : we filtered suspected bots, we flagged breakoff questions and positions, and we did correlation analysis. </p>
+<p>Of the 67 unique respondents in this second run of the phonology survey, we had 46 self-reported native English speakers. We flagged 3 respondents as bad actors. Since we do not have full randomization for Likert scale questions, we use positional preference to flag potential adversaries. Since symmetric positions are equally likely to hold one extreme or another, we say that we expect the number of responses in either of the symmetric positions to be equal. If there is a disproportionate number of responses in a particular position, we consider this bad behavior and will flag it. Note that this method does not address random respondents. </p>
+<p>Our three flagged respondents had the following positional frequencies (compared with the expected number, used as our classification threshold). The total answered are out of the 96 questions that comprise the core of the study.</p>
+<table>
+<tr>
+<td>Position 1</td>
+<td>Position 2</td>
+<td>Position 3</td>
+<td>Position 4</td>
+<td>Total Answered</td>
+</tr>
+<tr>
+<td>82 &gt;= 57.829081</td>
+<td>4</td>
+<td>10</td>
+<td>0</td>
+<td>96</td>
+</tr>
+<tr>
+<td>0</td>
+<td>84 &gt;= 64.422350</td>
+<td>9</td>
+<td>3</td>
+<td>96</td>
+</tr>
+<tr>
+<td>28 &gt;= 24.508119</td>
+<td>10</td>
+<td>0</td>
+<td>1</td>
+<td>39</td>
+</tr>
+</table>
+<p>We calculated statistically significant breakoff for both question and position at counts above 1. We use the bootstrap to calculate confidence intervals and round the counts up to the nearest whole number. Due to the small sample size in comparison with the survey length, these particular results should be viewed cautiously:</p>
+<table>
+<tr>
+<td>Position</td>
+<td>Count</td>
+</tr>
+<tr>
+<td>40</td>
+<td>2</td>
+</tr>
+<tr>
+<td>44</td>
+<td>2</td>
+</tr>
+<tr>
+<td>49</td>
+<td>3</td>
+</tr>
+<tr>
+<td>66</td>
+<td>2</td>
+</tr>
+<tr>
+<td>97</td>
+<td>20</td>
+</tr>
+</table>
+<table>
+<tr>
+<td>Wording Instance<br />(Question)</td>
+<td>Suffix</td>
+<td>Count</td>
+</tr>
+<tr>
+<td>'marine'</td>
+<td>'thon'</td>
+<td>2</td>
+</tr>
+<tr>
+<td>'china'</td>
+<td>'thon'</td>
+<td>2</td>
+</tr>
+<tr>
+<td>'drama'</td>
+<td>'thon'</td>
+<td>2</td>
+<td /></tr>
+<tr>
+<td>'estate'</td>
+<td>'thon'</td>
+<td>2</td>
+</tr>
+<tr>
+<td>'antidote'</td>
+<td>'thon'</td>
+<td>4</td>
+</tr>
+<tr>
+<td>'office'</td>
+<td>'licious'</td>
+<td>2</td>
+</tr>
+<tr>
+<td>'eleven'</td>
+<td>'thon'</td>
+<td>2</td>
+</tr>
+<td>'affidavit'</td>
+<td>'licious'</td>
+<td>2</td>
+</table>
+<p>Two features jump out at us for the positional breakoff table. We clearly have significant breakoff at question 98 (index 97). Recall that we have 96 questions in the central block, two questions in the first block, and one question in the last block. Clearly a large number of people are submitting responses without feedback. The other feature we'd like to note is how there is some clustering in the 40s - this might indicate that there is a subpopulation who does not want to risk nonpayment due to our pricing scheme and has determined that breakoff is optimal at this point. Since we do not advertise the number of questions or the amount we will pay for bonuses, respondents must decide whether the risk of not knowing the level of compensation is worth continuing.</p>
+<p>Like Cramer's $$V$$, we flag cases where Spearman's $$\rho$$ are greater than 0.5. We do not typically have sufficient data to perform hypothesis testing on whether or not there is a correlation, so we flag all found strong correlations. </p>
+<p>The correlation results from this run of the survey were not good. We had 6 schwa-final words and 6 vowel-final words. There are 15 unique comparisons for each set. Only 5 pairs of schwa-final words and 3 pairs of vowel-final were found to be correlated in the -thon responses. 9 pairs of schwa-final words and 1 pair of vowel-final words were found to be correlated in the -licious responses. If we raised the correlation threshold to 0.7, none of the schwa-final pairs were flagged and only 1 of the vowel-final pairs was flagged in each case. Seven additional pairs were flagged as correlated for -thon and 3 additional pairs were flagged for -licious.</p>
+<h3>Third Run</h3>
+<p>The third run of the survey used no qualifications. We had hoped to attract bots with this run of the survey. Recall that in the previous survey we filtered respondents using AMT Qualifications. Our hypothesis was that bots would submit results immediately.</p>
+<p>This run of the survey was the first in this series to be launched during the work day (EST). We obtained 148 total responses, of which 129 were unique. 113 unique respondents claimed to be native English speakers. Of these, we classified 8 as bad actors.</p>
+<table>
+<tr>
+<td>Position 1</td>
+<td>Position 2</td>
+<td>Position 3</td>
+<td>Position 4</td>
+<td>Total Answered</td>
+</tr>
+<tr>
+<td>23 &gt;= 21.104563</td>
+<td>41</td>
+<td>31</td>
+<td>1</td>
+<td>96</td>
+</tr>
+<tr>
+<td>0</td>
+<td>3</td>
+<td>51 &gt;= 40.656844</td>
+<td>38 &gt;= 30.456324</td>
+<td>92</td>
+</tr>
+<tr>
+<td>25 &gt;= 22.476329</td>
+<td>39</td>
+<td>31</td>
+<td>1</td>
+<td>96</td>
+</tr>
+<tr>
+<td></td>
+<td>29</td>
+<td>67 &gt;= 66.209126</td>
+<td></td>
+<td>96</td>
+</tr>
+<tr>
+<td>6</td>
+<td>12</td>
+<td>43 &gt;= 41.282716</td>
+<td>21</td>
+<td>82</td>
+</tr>
+<tr>
+<td>0</td>
+<td>4</td>
+<td>42 &gt;= 35.604696</td>
+<td>50 &gt;= 38.141304</td>
+<td>96</td>
+</tr>
+<tr>
+<td>6</td>
+<td>28</td>
+<td>32</td>
+<td>30 &gt;= 29.150767</td>
+<td>96</td>
+</tr>
+<tr>
+<td>25</td>
+<td>0</td>
+<td>3</td>
+<td>68 &gt;= 64.422350</td>
+<td>96</td>
+</tr>
+</table>
+<p>Clearly there are some responses that are just barely past the threshold for adversary detection ; the classification scheme we use is conservative. </p>
+<p>Interestingly, we did not get the behavior we were courting for breakoff. Only the penultimate index had statistically significant breakoff; 51 respondents did not provide written feedback. We found 9 words with statistically significant breakoff at abandonment counts greater than 2 (they all had counts of 3 or 4). The only words to overlap with the previous run were "estate" and "antidote". The endings for both words differed between runs.</p>
+<p>As in the previous run, only 5 pairs of schwa-final words plus -thon had correlations above 0.5. Fewer vowel-final pairs (2, as opposed to 3) plus -thon were considered correlated. For the -licious suffix, 10 out of 15 pairs of schwa-final words had significant correlation, compared with 9 out of 15 in the previous run. As in the previous run, only 1 pair of vowel-final words plus -licious had a correlation coefficient above 0.5. This results do not differ considerably from the previous run.</p>
+<h3>Fourth Run</h3>
+<p>This run was executed close to midnight EST on a Friday. Of the 157 respondents, 98 reported being native English speakers. We found 83 responses that were not classified as adversaries. Below are the 15 bad actors' responses:</p>
+<table>
+<tr>
+<td>Position 1</td>
+<td>Position 2</td>
+<td>Position 3</td>
+<td>Position 4</td>
+<td>Total Answered</td>
+</tr>
+<tr>
+<td>65 &gt;= 64.422350</td>
+<td>3</td>
+<td>0</td>
+<td>28</td>
+<td>96</td>
+</tr>
+<tr>
+<td>29 &gt;= 25.847473</td>
+<td>2</td>
+<td>0</td>
+<td>2</td>
+<td>33</td>
+</tr>
+<tr>
+<td>0</td>
+<td>5</td>
+<td>87 &gt;= 63.825733</td>
+<td>4</td>
+<td>96</td>
+</tr>
+<tr>
+<td>9</td>
+<td>18</td>
+<td>19</td>
+<td>37 &gt;= 35.604696</td>
+<td>83</td>
+</tr>
+<tr>
+<td>13</td>
+<td>2</td>
+<td>18</td>
+<td>52 &gt;= 47.483392</td>
+<td>85</td>
+</tr>
+<tr>
+<td>53 &gt;= 40.029801</td>
+<td>2</td>
+<td>1</td>
+<td>0</td>
+<td>56</td>
+</tr>
+<tr>
+<td>96 &gt;= 66.209126</td>
+<td></td>
+<td></td>
+<td>0</td>
+<td>96</td>
+</tr>
+<tr>
+<td>3</td>
+<td>12</td>
+<td>40 &gt;= 39.401554</td>
+<td>41 &gt;= 34.327636</td>
+<td>96</td>
+</tr>
+<tr>
+<td>1</td>
+<td>3</td>
+<td>5</td>
+<td>17 &gt;= 16.884783</td>
+<td>26</td>
+</tr>
+<tr>
+<td>3</td>
+<td>1</td>
+<td>1</td>
+<td>91 &gt;= 65.018449</td>
+<td>96</td>
+</tr>
+<tr>
+<td>36 &gt;= 33.044204</td>
+<td>42 &gt;= 40.656844</td>
+<td>12</td>
+<td>6</td>
+<td>96</td>
+</tr>
+<tr>
+<td>6</td>
+<td>32 &gt;= 29.804578</td>
+<td>5</td>
+<td>0</td>
+<td>43</td>
+</tr>
+<tr>
+<td>35 &gt;= 30.456324</td>
+<td>41</td>
+<td>17</td>
+<td>3</td>
+<td>96</td>
+</tr>
+<tr>
+<td>20 &gt;= 19.716955</td>
+<td>18</td>
+<td>11</td>
+<td>2</td>
+<td>51</td>
+</tr>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>5</td>
+<td>91 &gt;= 63.228589</td>
+<td>96</td>
+</tr>
+</table>
+<p>For the -thon pairs, 1 out of the 15 schwa correlations was correctly detected. None of the vowel correlations correctly were detected. For -licious, 2 schwa pair correlations were correctly detected and 4 vowel pair correlations  where correctly detected.</p>
+<p>For this survey we calculated statistically significant breakoff for individual questions when their counts were above 2 and for positions when their counts were above 1. The penultimate question had 38 instances of breakoff. Fourteen questions had breakoff. The maximum cases were 4 counts each for "cayenne" and "hero" for the suffix -licious. </p>
+<h3>Entropy Comparison</h3>
+<p>We observed the following entropies over the 96 questions of interest. Note that the maximum entropy for this section of the survey is 192.</p>
+<table>
+<tr>
+<td>Instance</td>
+<td>Initial Entropy</td>
+<td>Entropy after<br />removing adversaries</td>
+</tr>
+<tr>
+<td>Fourth Run</td>
+<td>186.51791933021704</td>
+<td>183.64368029571745</td>
+</tr>
+<tr>
+<td>Third Run</td>
+<td>173.14288208850118</td>
+<td>169.58411284759356</td>
+</tr>
+<tr>
+<td>Second Run</td>
+<td> 172.68764654915321</td>
+<td>169.15343722609836</td>
+</tr>
+</table>
+<h4>Notes</h4>
+<p>Due to a bug in the initial analysis in the last survey (we changed formats between the third and the fourth), the first run of the analysis did not filter out any non-native English speakers and ran the analysis on 137 respondents. There were 20 adversaries calculated in total and only a handful of correlations detected. The entropy before filtering was 190.0 and after, 188.0. We also counted higher thresholds for breakoff. We believe this illustrates the impact of a few bad actors on the whole analysis.</p>
+<p>Note that we compute breakoff using the last question answered. A respondent cannot submit results without selecting some option; without doing this, the "Submit Early" button generally will not appear. However, for the first three runs of the survey, we supplied custom Javascript to allow users to submit without writing in the the text box for the last question.  </p>

@@ -1,0 +1,24 @@
+---
+layout: post
+title: 'Bug Detection I : Bad Actors'
+date: 
+type: post
+published: false
+status: draft
+categories: []
+tags: []
+meta:
+  _edit_last: '20775'
+author:
+  login: etosch
+  email: etosch@cns.umass.edu
+  display_name: Emma Tosch
+  first_name: Emma
+  last_name: Tosch
+---
+<p>The ability to flag bad actors automatically is a crucial component of SurveyMan's quality control and runtime system. Validating that someone is a bad actor, however, is not trivial -- we don't have an oracle to tell us if someone is gaming the system, and we can't just contact a worker and ask them if they were behaving badly. In a <a href="http://blogs.umass.edu/etosch/2014/03/13/adversaries/">previous post</a>, we talked about adversary models for bad respondents. The purpose of that post was to describe their behavior.</p>
+<p>We also need to consider the cost associated with making a mistake in our classification. Classifying all respondents as valid when there exist bots and spammers is not good for obvious reasons, especially when the proportion of bad actors drowns out the signal from our target population. If we expect the sample to draw from a single population, rather than subpopulations, an aggressive bot-detection policy would be tempting. SurveyMan makes it easy to re-run surveys, and since the cost is so low, why not? </p>
+<p>Unfortunately, crowdsourcing platforms such as AMT use rejection of work as a measure of a worker's ability. Other requesters may filter workers on this basis. Since workers on crowdsourcing platforms value their ratings higher than the payment for any individual job, aggressive rejection of work has a greater impact on the workers than just the lost income. Furthermore, the presence of websites like www.mturkforum.com and tools like turkopticon give workers a platform to share experiences with bad requesters. The cost of making mistakes is high -- the requester may be blacklisted by the workers (this is not a hypothetical concern; I have anecdotes!).<br />
+ Indeed, other researchers have shied away from outright rejecting work : "Generally, we do not advocate excluding participants except under the most extremely obvious situations of abuse (e.g., pushing the same button the entire time)." (<a href="http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0057410">Crump et al 2013</a>). </p>
+<p>Any adversary detection must have a two tiered classification scheme : when we are sure that a respondent is a bot or a spammer, we should reject. If the respondent merely looks lazy, we should flag them.</p>
+<p>MaxEnt, MaxLogLikelihood, and Bias all implicitly assume something we know is not true : that the questions are independent. This assumption of independence makes us falsely assume that certain operations are linear, which causes us to perform lossy calculations on the data.</p>

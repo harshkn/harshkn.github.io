@@ -1,0 +1,64 @@
+---
+layout: post
+title: Automated Hypothesis Generation Based on Mining Scientific Literature
+date: 2015-02-09 17:52:27.000000000 -05:00
+type: post
+published: true
+status: publish
+categories:
+- Research
+tags: []
+meta:
+  _edit_last: '20775'
+author:
+  login: etosch
+  email: etosch@cns.umass.edu
+  display_name: Emma Tosch
+  first_name: Emma
+  last_name: Tosch
+---
+<p>The title of this blog post is a paper that recently appeared at KDD. Here is <a href="http://delivery.acm.org/10.1145/2630000/2623667/p1877-spangler.pdf?ip=128.119.40.193&amp;id=2623667&amp;acc=ACTIVE%20SERVICE&amp;key=73B3886B1AEFC4BB.0404F0890BAA435B.316E9A8C8A786537.4D4702B0C3E38B35&amp;CFID=620569742&amp;CFTOKEN=62130492&amp;__acm__=1423247674_97b9de9f9761bccc12bcf13b137080cd">a link that probably won't work</a>. This post will be a running commentary on the paper as I read it.</p>
+<h3>Abstract</h3>
+<p>"Current search technologies typically find many relevant documents, but they do not extract and organize the information content of these documents or suggest new scientific hypotheses based on this organized content."</p>
+<p>Okay, so there are a few big ideas here wrapped up in one. Information retrieval and information extraction are two sides of the same coin. This is what <a href="http://cs.umass.edu/~jfoley">John</a> does.  Organization of the content is also related to what his group does and is certainly on the cutting edge of IR/IE. The step of suggesting hypotheses is more traditional AI, and I wonder how we extend from the more empirical, metrics-based approaches of the aformentioned fields to the more theoretical, rules-based approaches of hypothesis generation.</p>
+<p>"KnIT...further reasons upon these data to generate novel and experimentally testable hypotheses."</p>
+<p>Cool!</p>
+<p>"KnIT combines entity detection with neighbor-text feature analysis and with graph-based diffusion of information to<br />
+identify potential new properties of entities that are strongly implied by existing relationships."</p>
+<p>Wow, sounds good. Entity detection is certainly hot right now, and folks from CIIR are very into it. I don't know anything about the graph-based diffusion of information bit, but it sounds like it uses information-theoretic metrics to tell how far an effect/feature/something reaches?</p>
+<h3>Introduction</h3>
+<p>"Even recognizing new questions that should be asked can be a challenge. Instead, only a sliver of the relevant knowledge guides hypotheses: an approach that is deeply wasteful. This fundamental bottleneck is pervasive in biology and representative of every area of human endeavor in which there is a mushrooming mismatch between raw information and our analytic abilities. "</p>
+<p>"Our goal is to accelerate scientific progress by combining mining, visualization, and analytics, with the hope to integrate all available content, identify the facts that are relevant to a given query, and from these facts suggest hypotheses that are new, interesting, testable and likely to be true."</p>
+<p>Lofty! Also, similar to some goals we have. </p>
+<p>Their running case study will be the protein p53, which is a tumor suppresor.</p>
+<p>KnIT stands for "Knowledge Integration Toolkit." It has three phases: exploration, interpretation, and analysis.</p>
+<p>Exploration involves some kind of extraction to generate features. The features index entities. Presumably the search space is the space of entities.</p>
+<p>Interpretation involves connecting entities into a graph. There are some higher dimensional visualization techniques that can be used to highlight "interesting" areas, e.g., coloring. "Interesting" parts of the graph are subgraphs that denote relationships between entities that have not previously been discovered.</p>
+<p>Analysis involves "globally diffus[ing] annotation information among entities" in order to rank them and select out the best entities for experimentation. I'm not sure what this means -- experimentation is only partially over entities. Presumably the experiment is to test a causal relationship between entities? If that's the case, then the graph representation needs a richer link structure than just "these are related."<br />
+NOTE: the relationship in this case is whether a kinase "phosphorylates" p53, so it is a specific causal relationship.</p>
+<p>They cite past work on hypothesis generation, and automatic inference of known formulae. However "hypothesis generation from unstructured text has been a hit-or-miss manual process."</p>
+<h3>Impact on society</h3>
+<p>Lofty. Our brains are limited. We aren't google (or cyborgs yet). Invoke Big Data. </p>
+<h3>The Problem of p53 Kinases</h3>
+<p>High-level discussion of p53. The takeaway: "knowing which proteins are modified by each kinase, and therefore which kinases would make good drug targets, is a difficult and unsolved problem."</p>
+<h3>Representing Kinases</h3>
+<p>They mine papers (especially abstracts) for keywords, essentially. These define the feature space (bag of words). They use a knowledge base that contains the canonical name and all known synonyms. The system then queries a paper database with a giant OR for all synonyms and extracts features from those papers' abstracts. They removed data that explicitly mentioned p53, since they were interested in discovering new relationships (rather than discovering those that had already been discovered and published). They represent each document (abstract) as a weighted normalized vector and remove stop words. They use tf-idf for their weights.</p>
+<p>After this first pass, they calculate kinase centroids in the feature space. Then they calculate the Euclidean distance between every centroid. This gives some numeric sense of how "close" two kinases are. However, it is not immediately clear how even a domain expert would interpret these numbers.</p>
+<p>They consider displaying the information as a network graph, but this model isn't quite right, since network graphs rely on nodes being connected or not connected, and here every node is "connected." They note that they could threshhold the distance to denote connectivity, but this would confer an interval interpretation to the distance, when ratio is really all that's warranted. </p>
+<p>They discuss visualization and HCI issues: how does one best communicate the data? They want to pare down the information sufficiently so that the user is not overloaded. They decide that the features they want are (a) minimal connectivity (minimize information presented), (b) tree-like (for the ease of navigation and the relative relationships between levels), and (c) low-arity (not sure what their argument is about -- they just don't want to have a linked list or something). They choose as the root the feature vector that is closest to the average of all the centroids and call this property "typicality."</p>
+<h3>Selecting Candidate p53 Kinases</h3>
+<p>They need a ranking for the kinases and use graph diffusion to accomplish this:</p>
+<p>"Graph diffusion is a semi-supervised learning approach for classification based on labeled and unlabeled data. It takes known information (initial labels) and then constrains the new labels to be smooth in respect to a defined structure (e.g. a network)."</p>
+<p>Their known data are the p53s. The unknown ones are the other kinases.</p>
+<p>They define a kinase network as the top 10 most closely related kinases. This number was chosen via cross validation. They are minimizing the error in predicted values less a smoothing term. They end up with a convex optimization problem. They show some ROC curves for their cross validation.</p>
+<h3>Results</h3>
+<p>They did three studies:</p>
+<ol>
+<li>They did a retrospective analysis that looked at whether the model could predict discoveries after a particular date, given publications that occurred strictly before that date. This is a nice baseline, but might be a bit misleading -- the interesting parts of science are the big leaps, not the incremental discoveries. The predictions in the retrospective study should be a minimum requirement, and not even a proof of concept. </li>
+<li>They compared the approach with human-driven state of the art discovery approaches and looked at areas for improvement.</li>
+<li>Their third study involved searching for discoveries at scale (the real promise of this work).</li>
+</ol>
+<p>I skimmed the rest of the section, which was filled with domain details and reports on how things went. Without a comparative study, it's hard to believe any "conclusion," and besides they state up front that this is a proof of concept anyway.</p>
+<h3>Conclusion and Future Work</h3>
+<p>Repetition of the intro. ENTITIES.</p>
+<p>Does this approach generalize? There was still a lot of domain knowledge baked in. Only time will tell...</p>

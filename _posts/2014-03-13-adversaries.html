@@ -1,0 +1,36 @@
+---
+layout: post
+title: Adversaries
+date: 2014-03-13 22:07:04.000000000 -04:00
+type: post
+published: true
+status: publish
+categories:
+- Research
+tags:
+- surveyman
+meta:
+  _edit_last: '20775'
+author:
+  login: etosch
+  email: etosch@cns.umass.edu
+  display_name: Emma Tosch
+  first_name: Emma
+  last_name: Tosch
+---
+<p>Bad actors are a key threat to validity that cannot be controlled directly through better survey design. That is, unlike the case of bias in wording or order, we cannot eliminate bugs through the survey design. What we can do is use the design to make it easier to identify these adversaries. </p>
+<h3> Bots </h3>
+<p>Bots are computer programs that fill out surveys automatically. We assume that bots have a policy for choosing answers that is either completely independent of the question, or is based upon some positional preference. </p>
+<p><b>No positional preference</b> A bot that chooses responses randomly is an example of one that answers questions independently from their content.</p>
+<p><b>Positional preference</b> A bot that always chooses the first question or always chooses the last question, or alternates positions on the basis of the number of available choices: for example, "Christmas tree-ing" a multiple choice survey. </p>
+<h3> Lazy Respondents </h3>
+<p>We define a lazy respondent as a human who is behaving in a bot-like way. In the literature these individuals are called <em>spammers</em> and according to a study from 2010, <a href="http://lorrie.cranor.org/pubs/note1552-downs.pdf">almost 40% of the population sampled</a> failed a screening task that only required basic reading comprehension. There are two key differences between human adversaries and software adversaries : (1) we hypothesize that individual human adversaries are less likely to choose responses randomly and (2) that when human adversaries have a positional preference, they are more likely make small variations in their otherwise consistent responses. Regarding (1), while there is <a href="http://cocosci.berkeley.edu/tom/papers/hard.pdf">no</a> <a href="http://etd.lsu.edu/docs/available/etd-07092004-113059/unrestricted/Armstrong_thesis.pdf">end</a> <a href="http://emlab.berkeley.edu/users/rabin/GHFTA_RESf.pdf">to</a> <a href="http://psych.cornell.edu/sites/default/files/Gilo.Vallone.Tversky.pdf">the</a> <a href="http://journal.sjdm.org/10/91117/jdm91117.html">number</a> <a href="http://psycnet.apa.org/journals/bul/76/2/105/">of</a> <a href="http://www.jstor.org/discover/10.2307/187083?uid=2&amp;uid=4&amp;sid=21103742630243">studies</a> and <a href="http://www.nytimes.com/2007/02/13/health/13iht-faces.html?pagewanted=all">amount</a> <a href="http://www.scientificamerican.com/article/patternicity-finding-meaningful-patterns/">of</a> <a href="http://online.wsj.com/news/articles/SB10001424052702304071004579409071015745370">press</a> devoted to <a href="http://psycnet.apa.org/journals/xge/62/4/385/">humans'</a> <a href="http://psycnet.apa.org/journals/xge/65/2/213/">inability</a> to identify <a href="http://psycnet.apa.org/psycinfo/2009-02580-008">randomness</a>, there has been <a href="http://www.sciencedirect.com/science/article/pii/S0306987705001143">some</a> <a href="http://www.sciencedirect.com/science/article/pii/S030698770700480X">debate</a> over whether humans can actually generate sequences of random numbers. Regarding (2), while a bot can be programmed to make small variations in positional preference, we believe that humans will make much more strategic deviations in their positional preferences.</p>
+<p>Both humans and bots may have policies that depend on the surface text of a question and/or its answer options. An example of a policy that chooses answers on the basis of surface text might be one that prefers the lexicographically first option, or one that always chooses surface strings equal to a value (e.g. contains "agree"). These adversaries are significantly stronger than the ones mentioned above. </p>
+<p>It's possible that some could see directly modeling a set of adversaries as overkill; after all, services such as AMT rely on reputable respondents for their systems to attract users (<a href="http://www.behind-the-enemy-lines.com/2010/07/mechanical-turk-low-wages-and-market.html">or not?</a>). While AMT has provided <a href="http://docs.aws.amazon.com/AWSMechTurk/latest/AWSMechanicalTurkRequester/Concepts_QualificationsArticle.html">means for requesters to filter the population</a>, this system <a href="http://www.behind-the-enemy-lines.com/2010/10/be-top-mechanical-turk-worker-you-need.html">can easily be gamed</a>. <a href="https://www.ischool.utexas.edu/~cse2010/slides/alonso-ECIR2010-tutorial.pdf">This tutorial</a> from 2010 describes best practices for maximizing the quality of AMT jobs. Unfortunately, injecting "attention check" or gold standard questions is insufficient to ward off bad actors. Surveys are a prime target for bad actors because the basic assumption is that the person posting the survey doesn't know what the underlying distribution of answers ought to look like -- otherwise, why would they post a survey? <a href="https://github.com/sckingsley">Sara Kingsley</a> recently pointed us to an article from <a href="http://www.npr.org/blogs/alltechconsidered/2014/03/05/279669610/post-a-survey-on-mechanical-turk-and-watch-the-results-roll-in">All Things Considered</a>. Emery found the following comment:</p>
+<blockquote><p>
+I've been doing Mechanical Turk jobs for about 4 months now.</p>
+<p>I think the quality of the survey responses are correlated to the amount of money that the requester is paying. If the requester is paying very little, I will go as fast as I can through the survey making sure to pass their attention checks, so that I'm compensated fairly.</p>
+<p>Conversely, if the requester wants to pay a fair wage, I will take my time and give a more thought out and non random response.
+</p></blockquote>
+<p>A key problem that the above quote illustrates is that modeling individual users is fruitless. <a href="http://aclweb.org/anthology/N/N13/N13-1132.pdf">MACE</a> is a seemingly promising tool that uses <em>post hoc</em> generative models of annotator behavior to "learn whom to trust and when." This work notably does not cite prior work by <a href="http://www.ipeirotis.com/">Panos Ipeirotis</a> on <a href="http://www.ipeirotis.com/wp-content/uploads/2012/01/hcomp2010.pdf">modeling users with EM</a> and considered variability in workers' annotations. </p>
+<p>The problem with directly modeling individual users is that it cannot account for the myriad latent variables that lead a worker to behave badly. In order to do so, we would need to explicitly model every individual's utility function. This function would incorporate not only the expected payment for the task, but also the workers' subjective assessment of the ease of the task, the aesthetics of the task, or their judgement of the worthiness of the task. Not all workers behave consistently across tasks of the same type (e.g. annotations), let alone across tasks of differing types. Are workers who accept HITs that cause them dissatisfaction more likely to return the HIT, or to complete the minimum amount of work required to convince the requester to accept their work? </p>

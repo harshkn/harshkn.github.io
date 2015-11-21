@@ -1,0 +1,72 @@
+---
+layout: post
+title: The one where I'm a Debbie Downer
+date: 2014-11-03 00:52:06.000000000 -05:00
+type: post
+published: true
+status: publish
+categories:
+- Research
+tags: []
+meta:
+  _edit_last: '20775'
+author:
+  login: etosch
+  email: etosch@cns.umass.edu
+  display_name: Emma Tosch
+  first_name: Emma
+  last_name: Tosch
+---
+<p>I've spent the month of October ironing out some nasty kinks in my internship and prepping for my OOPSLA talk, so I'm pretty behind on blog posts (what else is new). This post isn't me finishing up anything I'd started earlier in the season. Instead, it's a quick look at a study I saw in my Google Scholar recommendations. </p>
+<p>The title of the work is </p>
+<h4>
+<a href="http://www.cs.dartmouth.edu/farid/downloads/publications/pus14.pdf">Does the Sun Revolve Around the Earth? A Comparison between the General Public and On-line Survey Respondents in Basic Scientific Knowledge</a></h4>
+<p>The conclusions are heartening -- the authors find (a) AMT workers are significantly more scientifically literate than their general population peers and (b) even with post-stratification, the observed respondents fare better. The point of the survey was an assessment of the generalizability of conclusions drawn from AMT samples. The authors note that past replications of published psychological studies were based on convenience samples anyway, so the bar for replication may have been lower. Polling that requires probability sampling is another animal.*</p>
+<p>The authors describe their method; I'm writing my comments inline:</p>
+<blockquote><p>
+Using a standard Mechanical Turk survey template, we published a HIT (Human Intelligence Task) titled "Thirteen Question Quiz" with the short description "Answer thirteen short multiple choice questions." The HIT was limited to respondents in the United States over the age of 18, to those that have a HIT Approval Rate greater than or equal to 95%, and to those that<br />
+have 50 or more previously approved HITs.
+</p></blockquote>
+<p>Here is a screenshot of the standard AMT survey template:</p>
+<p><a href="http://blogs.umass.edu/etosch/files/2014/11/Screen-Shot-2014-11-02-at-9.08.27-PM.png"><img src="{{ site.baseurl }}/assets/Screen-Shot-2014-11-02-at-9.08.27-PM-300x215.png" alt="Screen Shot 2014-11-02 at 9.08.27 PM" width="300" height="215" class="aligncenter size-medium wp-image-2270" /></a></p>
+<p>We can safely assume that (a) the entire contents of the survey was displayed at once and (b) there was no randomization.</p>
+<p>With Turker filters, the quality of the respondents was probably pretty good. The title conveys that the survey is easy. If they didn't use the keyword survey, they probably attracted a broader cohort than typical surveys.</p>
+<p>I did a quick search with the query "mechanical turk thirteen question quiz" and came up with <a href="http://www.reddit.com/r/HITsWorthTurkingFor/comments/1y2ks3/us_thirteen_question_quiz_hany_farid_501min_95/">these</a> <a href="http://www.reddit.com/r/HITsWorthTurkingFor/comments/1y0vx1/us_thirteen_question_quiz_hany_farid_05040/">two</a> hits, which basically just describe the quiz as taking &lt;2mins to complete and being super easy fast cash (didn&#039;t see anything on TurkerNation or other forums). Speaking of fast cash, the methods section states:</p>
+<blockquote><p>
+Respondents were paid $0.50 regardless of how they performed on the survey.
+</p></blockquote>
+<p>Well, there you go.</p>
+<p>The authors continue:</p>
+<blockquote><p>
+Shown in Table 1 are the thirteen questions asked of each AMT respondent. The questions numbered 1-7 relate to scientific literacy (Miller, 1983, 1998). The questions numbered 8-10 provide basic demographic information (gender, age, and education). Interlaced within these ten questions are three simple control questions, which are used to ensure that the respondent reads each question. We published a total of 1037 HITs each of which were completed.
+</p></blockquote>
+<p>I'm going to interject here and say I think they meant that they posted 1 HIT having 1,037 assignments. Two things make me say this: (1) the authors did not mention anything about repeaters. If they posted 1,037 HITs, they should have problems with repeaters (unless they used the newly implemented <a href="http://mechanicalturk.typepad.com/blog/2014/07/new-qualification-comparators-add-greater-flexibility-to-qualifications-.html">NotIn</a> qualification, which essentially implement's AutoMan's exclusion algorithm) and (2) since the authors say they used a default template, that means they constructed the survey using AMT's web interface, rather than constructing it programmatically. It would be difficult to construct 1,037 HITs manually. </p>
+<blockquote><p>
+The total sample size was decided upon before publishing the HITs, and determined as a number large enough to warrant comparison with the GSS sample.
+</p></blockquote>
+<p>That sounds fair.</p>
+<blockquote><p>
+Of the completed HITs, 23 (2.2%) were excluded because the respondent either failed to answer all of the questions, or incorrectly answered one or more of the simple control questions.
+</p></blockquote>
+<p>There were three control questions in total. The probability of a random respondent answering all three correctly is 0.125, which is not small. Conversely, the control questions may not have been as clear as the authors thought (more on this later).</p>
+<p>Continuing:</p>
+<blockquote><p>
+In half of the HITs, Question 3 was accompanied by a simple illustration of each option (Earth around Sun<br />
+and Sun around Earth), to ensure that any incorrect responses were not due to confusion caused by the wording of the question, which was identical to the GSS ballot wordings.
+</p></blockquote>
+<p>First off, the "half of the HITs" not makes me think that they had two hits, each assigned approximately one half of the 1,037 responents. </p>
+<p>Secondly, it's good to know that the wording of the experimental questions was identical to the comparison survey. I am assuming that the comparison survey did not have control questions, since this would be far less of a concern for a telephone survey. However, I don't know and am postponing verifying that in an attempt to actually finish this blog post. :)</p>
+<blockquote><p>
+However, the illustration did not affect the response accuracy, so we report combined results for both survey versions throughout. A spreadsheet of the survey results are included as Supplemental Material.
+</p></blockquote>
+<p>There is not a supplemental material section on this version of the paper (dated Oct. 9, 2014 and currently in press for the "Public Understanding of Science" journal).  I checked both author's webpages and there was not a supplemental material link anywhere obvious. I suppose we'll have to wait for the article (or email them directly). </p>
+<p>Now for the survey questions themselves and the heart of my criticism:</p>
+<p> [table id=7 /]</p>
+<p>You can see essentially this table in the paper. I added the last column, since I couldn't get the formatting in the table to work. I have two main observations about the questions:</p>
+<ol>
+<li>The wording of the control questions isn't super clear. Strawberries are green for most of their "lives" and only turn red upon maturing. Also, a five hour day could mean five hours of sunlight, a five hour work-day, or some other ambiguous unit of time.</li>
+<li>More importantly though, the design contains ONE WEIRD FLAW -- A respondent could "Christmas tree" the response and get all three control questions correct! (Although "only" four out of the seven real questions would be correct.) This makes me wonder what effect randomization would have on the total survey. </li>
+</ol>
+<p>While I'd love to believe that Americans are more scientifically literate than what's generally reported (or even believe that AMT workers are more scientifically literate), I do see some flaws in the study and would like to see a follow-up study for verification.</p>
+<p><small><br />
+*While traditionally true, the domain of non-representative polls is currently hot stuff. I've only seen Gelman &amp; Microsoft's work on XBox polls, which used post-stratification and hierarchical models to estimate missing data. As far as I understand it (and I'm not claiming to understand it well), this work relies on two major domains of existing knowledge about the unobserved variables (1) the proportion of the unobserved strata and (2) past behavior/opinions/some kind of prior on that cohort. So, if you're gathering data via XBox for election polling and as a consequence have very little data on what elderly women think, you can use your knowledge about their representation in the current population, along with past knowledge about how they respond to certain variables, to predict how they will respond in this poll. If you are collecting data on a totally new domain, this method won't work (unless you have a reliable proxy). I suspect it also only works in cases where you suspect there to be reasonable stability in a population's responses -- if there is a totally new question in your poll that is unlike past questions and could cause your respondents to radically shift their preferences, you probably couldn't use this technique. I think a chunk of AMT work falls into this category, so representative sampling is a legitimate concern.</small></p>

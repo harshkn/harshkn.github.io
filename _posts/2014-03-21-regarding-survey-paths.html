@@ -1,0 +1,39 @@
+---
+layout: post
+title: Regarding Survey Paths
+date: 2014-03-21 04:38:16.000000000 -04:00
+type: post
+published: true
+status: publish
+categories:
+- Research
+tags:
+- surveyman
+meta:
+  _edit_last: '20775'
+author:
+  login: etosch
+  email: etosch@cns.umass.edu
+  display_name: Emma Tosch
+  first_name: Emma
+  last_name: Tosch
+---
+<p>The key invariant we wish to preserve throughout the survey is that an individual's answers are the same, no matter which version of the survey they see. That is, if the same respondent were to take the survey twice, beginning to end, the total number of questions seen and answers given would remain the same. We'll see in this post how this invariant influences enumerating and computing metrics on paths. In a later post, we'll see how this invariant leads us to analyze survey "bugs."</p>
+<p>We use paths through the survey to aid in the debugging process and to automate some parameters to the crowdsourcing backend. Let's take a moment to look at how some of the design choices we've made impact possible paths through the survey:</p>
+<h3>Top-level blocks</h3>
+<p>At the top level, a survey is composed of blocks. If there are no blocks (i.e. the survey is completely flat), we can say that all questions belong to a single block.</p>
+<p>Top-level blocks have the following <a href="http://blogs.umass.edu/etosch/2014/03/19/static-analysis/#lattice">branch requirements</a>:</p>
+<ol>
+<li>There is only one "true" branch question per block.</li>
+<li>Branch question destinations must all be top-level blocks.</li>
+</ol>
+<p>If there is a branch question, it may appear in any position, subject to any blocking constraints. The branching action isn't evaluated until every question that we plan to execute in the block is executed. </p>
+<h3>Randomizable blocks</h3>
+<p>Top-level randomizable blocks are not allowed to have branch questions. They also cannot be branch destinations. Permitting branching to or from randomizable blocks could cause us to have a loop in the program. For example, if block 3 branches to some randomizable block we'll call X, and X happens to appear before block 1, we have a problem, since we will have already executed X. Similarly, if we branch from X to 3 and X appears as the last block in a survey, we will also have a loop.</p>
+<p>In addition to violating our DAG guarantee, branching to or from randomizable blocks could cause nondeterminism in the number of questions asked. If block 3 branches to X, but X is the last block in the survey for one person, but immediately follows 3 for another, we will be allowing randomness to have an influence on the answer set. </p>
+<p>Note that if we are using branching for sampling, the above doesn't apply.</p>
+<p>On the other hand, randomizable subblocks may be a branch source. If their branch destination is ALL, we have no conflicts, since we will choose the next (randomly determined) sequential question as usual. If their branch paradigm is ONE, then their branch question becomes the one branching question for the topmost enclosing block. This is exactly the same as for non-randomizable subblocks.</p>
+<h3>Enumerating paths</h3>
+<p>We stated at the beginning of this post that answer sets should be invariant for the version of the survey seen. In the previous post, we described how path data can be used for static analysis. </p>
+<p>When we view a path through the survey as the series of questions seen and answered, the computation of all such paths is intractable. Consider a short survey we recently ran that had 16 top-level randomizable blocks, each having four variants and no branching. We have 16! total block orderings. Then, since we choose from four different questions, we end up with $$2^{16!}$$ unique paths. </p>
+<p>Fortunately, the computations we mentioned in the static analysis post do not require knowing the contents of the path. They only require that we know the size of the path. Since we have required that every appropriate question in a top level block be executed, we can treat top level blocks as nodes in the possible survey DAG. The weight of these nodes (i.e. the size of the block) can be computed statically. Then we only need to consider the branching between these top level blocks. </p>

@@ -1,0 +1,27 @@
+---
+layout: post
+title: Using 3x
+date: 2015-01-25 22:45:30.000000000 -05:00
+type: post
+published: true
+status: publish
+categories:
+- Research
+tags: []
+meta:
+  _edit_last: '20775'
+author:
+  login: etosch
+  email: etosch@cns.umass.edu
+  display_name: Emma Tosch
+  first_name: Emma
+  last_name: Tosch
+---
+<p>A few months ago, Emery pointed out a new project being advertised on Stanford's CS web page. It's called <a href="http://cs.stanford.edu/research/3x-workbench-executing-exploratory-experiments">3x</a> and describes the system:</p>
+<blockquote><p>
+3X is an open-source software tool to ease the burden of conducting computational experiments and managing data analytics. 3X provides a standard yet configurable structure to execute a wide variety of experiments in a systematic way, avoiding repeated creation of ad-hoc scripts and directory hierarchies. 3X organizes the code, inputs, and outputs for an experiment. The tool submits arbitrary numbers of computational runs to a variety of different compute platforms, and supervises their execution. It records the returning results, and lets the experimenter immediately visualize the data in a variety of ways. Aggregated result data shown by the tool can be drilled down to individual runs, and further runs of the experiment can be driven interactively. Our ultimate goal is to make 3X a “smart assistant” that runs experiments and analyzes results semi-automatically, so experimenters and analysts can focus their time on deeper analysis. Two features toward this end are under development: visualization recommendations and automatic selection of promising runs.
+</p></blockquote>
+<p>The <a href="https://github.com/netj/3x">github repository</a> describes a system for planning and re-running experiments. The tool manages inputs and outputs and produces a factorial design on the basis of the inputs. It isn't clear to me whether a more sophisticated design is allowed. </p>
+<p>I attempted to run a 3x experiment over the bocado work. The idea was to run with and without tracing, at varying sizes of number of functions sampled. Installing the tool seemed fine, but getting it to work on my machine was another problem. I tried both the executable provided and building from source. Initially the problem seemed to be with the custom file-watcher the author built. An error was being thrown in the GUI script when I tried to start that up after specifying the experiment. When I tried running the experiment with `3x run`, nothing appeared to happen. After some fiddling and starting again from scratch, I was able to get something running, although it didn't look like my program was running, nor did the GUI appeared to work. There was limited debug information, so after a while I just gave up. The documentation for this tool includes screen shots of the GUI, which makes me think it works somewhere. </p>
+<p>I would definitely be interested in using this tool in conjunction with some of our tools. I noticed in <a href="https://github.com/netj/3x/issues/28">one of the issue comments</a> that there appears to be another, similar tool called <a href="http://neuralensemble.org/sumatra/">Sumatra</a>, which I will check out in the future.</p>
+<p>Of interest to us is the last statement on the Stanford page, stating that the goal of 3x is for it to operate "semi-automatically." It promises development of "visualization recommendations and automatic selection of promising runs". I am interested in seeing if/how that pans out.</p>

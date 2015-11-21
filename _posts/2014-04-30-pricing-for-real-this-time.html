@@ -1,0 +1,53 @@
+---
+layout: post
+title: Pricing, for real this time
+date: 2014-04-30 10:53:31.000000000 -04:00
+type: post
+published: true
+status: publish
+categories:
+- Research
+tags:
+- surveyman
+meta:
+  _edit_last: '20775'
+author:
+  login: etosch
+  email: etosch@cns.umass.edu
+  display_name: Emma Tosch
+  first_name: Emma
+  last_name: Tosch
+---
+<p>Reader be warned : I began this draft several weeks ago, so there might be a lack of coherence...</p>
+<p>A few weeks ago I posted <a href="http://blogs.umass.edu/etosch/2014/03/14/the-pricing-problem-in-surveyman/">some musings</a> on pricing. In that post I was mainly concerned with the modeling problem for pricing. Here I'd like to discuss some research questions I've been bandying about with <a href="https://github.com/sckingsley">Sara Kingsley</a>, and outline the experiments we'd like to run. </p>
+<h2>The Problem</h2>
+<p>Pricing is intricately tied together with quality control; we use pricing algorithms to help ensure quality control. When we previously outlined our <a href="http://blogs.umass.edu/etosch/2014/03/13/adversaries/">adversaries</a>, we took a traditional approach with the assumption that an actor is either good or bad. There are several key features that this model ignores:</p>
+<ol>
+<li> Some workers are better at some types of tasks than other types of tasks. </li>
+<li> The quality of the task has an impact on the quality of the worker's output. </li>
+<li> Some design decisions in services such as AMT sometimes make it difficult to tease out the difference between the above two. </li>
+</ol>
+<p>(1) is well known and solved by conditioning the classification on the task. Plenty of work on assessing the quality of AMT workers incorporates task difficulty or task type. Task type discretizes the space, making classification clean and easy. Task difficulty is more difficult to model, since it can be highly subjective. I'm also not sure it's entirely discrete and have not come across a compelling paper on the subject (though I haven't looked thoroughly, so please post any in the comments!). </p>
+<p>(2) seems to be better-known among social scientists than computer scientists. AMT workers have online forums where they post information about HITs. Typically if a HIT is good, they post very little additional information. If a HIT is bad, they will review it.</p>
+<p>Poorly designed or unclear HITs incur a high cost for the workers and the requesters. Literature on crowdworkers' behavior suggests that they are aiming for a particular rate. On AMT, a worker can return a HIT at any time. However, if a worker returns a HIT, they will not be compensated for any work whatsoever, and no information about abandonment is returned to the requester. Consequently, as a worker makes their way through a HIT, they must weight the cost of completion against the cost of abandonment. Even workers who are highly skilled at a particular task may perform poorly if a HIT is poorly designed. If workers do not reach out to requesters or if requesters do not search for their own HITs on forums, they may never know that workers are abandoning the work, or if they do, why. </p>
+<p>Quality of the work is clearly tied to quality of the task. In SurveyMan, we address quality of the task in a more principled way than just best practices. It would also stand to reason that quality of the work would be tied to price. One might hypothesize that a higher price for a task would translate to higher quality work. However (according to what Sara's told me), this is not the case. Work quality allegedly does not appear to respond to price. We believe that this result is a direct consequence from the AMT shortcoming detailed above -- prohibiting workers from submitting early enforces a discontinuity in the observed quality/utility function. </p>
+<h2>How to address pricing</h2>
+<p>There are two main research questions we would like to address:</p>
+<ol>
+<li>Does the design of SurveyMan change worker behavior?</li>
+<li>Can we find a general function for determining the price/behavior tradeoff, and implement this as part of the SurveyMan runtime system?</li>
+</ol>
+<p>The impetus for these particular questions was the results we found when running Sara's <a href="http://blogs.umass.edu/etosch/2014/03/19/creating-sophisticated-online-surveys-a-case-study/">wage survey</a>. There were two differences in the deployment of this survey: (1) I did not run this survey with a breakoff notice and (2) this was the first survey launched over a weekend. </p>
+<p>So-called "time of day effects" are a known problem with AMT. Since AMT draws primarily on workers from the US and India, there are spikes in participation during times when these workers are awake and engaged. Many workers perform HITs while employed at another job. It wouldn't be a stretch to claim that sub-populations have activity levels that can be expressed as a function of the day of the week. This could explain some of the behavior we observed with Sara's wage survey. However, the survey ran for almost a week before expiring. I believe that (1) had a strong influence on workers' behavior. </p>
+<h2>Is SurveyMan the Solution?</h2>
+<p>Sara had mentioned some work in economics that found that changing the price paid for a HIT on AMT had no impact on the quality of the work. I had read some previous work that discussed the impact of price on attracting workers, but discussed quality control as a function of task design, rather than pricing. I suspect that the observed absence of difference between price points is related to the way the AMT system is designed. </p>
+<p>AMT does not pay for partial work. When a worker accepts a HIT, they can either complete the HIT and submit it for payment (which is not guaranteed), or they return the HIT and receive no payment. Since requester review sites exist, the worker can use the requester's reputation as a proxy for the likelihood that they'll be paid for their work and as a proxy for the quality of the HIT. </p>
+<p>Consider the case where the HIT is designed so that the worker has complete information about the difficulty of the task. In the context of SurveyMan, this would be a survey whose contents are displayed all on the same page. We know that there will be surveys where this approach is simply not feasible - one example that comes to mind is experimental surveys that require measuring the difference in a respondent's responses over two different stimuli. In any case, if the user is able to see the entire survey, they will be able to gauge the amount of effort required to complete the task, and make an informed decision about whether or not to continue with the HIT.</p>
+<p>This design has several drawbacks. There's the aforementioned restriction over the types of surveys we can analyze. There's also a problem with our ability to measure breakoff. Since we display one question at a time, in a more or less randomized order, we can tell the difference between questions that cause breakoff and length-related breakoff. When the respondent is allowed to skip around and answer questions in any order, we lose this power. We also lose any inferences we might make about question order, and generally have a more muddied analysis.</p>
+<p>Displaying questions one at a time was always part of our design. However, we decided to allow users to submit early as a way of handling this issue with AMT and partial work. Since we couldn't get any information about returned HITs, we decided to discourage users from returning them and instead allow them to submit their work early. Since we figured that we would need to provide users with an incentive to continue answering questions, we displayed a notice at the beginning of a survey that told the user that they would be paid a bonus commensurate with the amount and quality of the work they submitted. We decided against telling the user (a) how the bonus would be calculated and (b) how long the survey would be. </p>
+<p>I initially thought we would court bots by allowing users to submit after answering the first question. This was absolutely not the case for the phonology surveys. Anecdotally it seems that AMT has been cracking down on bots, but I had a really hard time believing that we had no bots. It wasn't until I posed the wage survey that I began to see this behavior. I believe that it is related to the lack of breakoff notice. </p>
+<p>It would be interesting to test some of these hypothesis on a different crowdsourcing platform, especially one that allows tracking for partial work. Even a system that has a different payment system set up would be a good point of comparison.</p>
+<h2>Possible Experiments</h2>
+<p>We set up the wage survey to run a fully randomized version and a control version at the same time. I really liked this setup, since it meant that any given respondent had a 50/% chance of seeing one of the two, effectively giving us randomized assignments.</p>
+<p><b>Experiment 1</b> To start with, I would like to run another version that randomly displays the breakoff notice on each version. One potentially confounding problem might be the payment of bonuses, since this has been our practice in the past, and may be known to the workers. The purpose of this experiment is to test whether showing the breakoff notice changes the quality of responses.</p>
+<p><b>Experiment 2</b> Another parameter that needs more investigation is the base pay. We recently started using federal minimum wage, an estimated time per question, and the max or average path through the survey (whether to use max or average is still up for debate). I've seen very low base pay, with the promise of bonuses, successfully attract workers. It isn't clear to me how the base pay is related to the number of responses or quality of worker.</p>

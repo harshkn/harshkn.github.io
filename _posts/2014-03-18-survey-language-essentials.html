@@ -1,0 +1,84 @@
+---
+layout: post
+title: Survey Language Essentials
+date: 2014-03-18 02:33:55.000000000 -04:00
+type: post
+published: true
+status: publish
+categories:
+- Research
+tags:
+- surveyman
+meta:
+  _edit_last: '20775'
+author:
+  login: etosch
+  email: etosch@cns.umass.edu
+  display_name: Emma Tosch
+  first_name: Emma
+  last_name: Tosch
+---
+<p>As discussed in a <a href="http://blogs.umass.edu/etosch/2014/03/11/observational-studies-surveys-quasi-experiments-and-experiments/">previous post</a>, web surveys are increasingly moving toward designs that more closely resemble experiments. A major goal in the SurveyMan work is to capture the underlying abstractions of surveys and experiments. These abstractions are then represented in the Survey language and runtime system.</p>
+<h3>Language</h3>
+<p>When the topic of a programming language for surveys came up, I initially proposed a SQL-like approach. Emery quite strongly suggested that SQL was, in general, a non-starter. He suggested a tabular language as an alternative approach that would capture the features I was so keen on, but in a more accessible format. To get started, he suggested I look at <a href="http://pages.cs.wisc.edu/~dbbook/openAccess/thirdEdition/qbe.pdf">Query by Example</a>.</p>
+<p>The current language can be written as a csv in a spreadsheet program. This csv is the input to the SurveyMan runtime system, which checks for correctness of the survey and performs some lightweight static analysis. The runtime system then sends the survey to the chosen platform and processes results until the stopping condition is met.</p>
+<p>The csv format has two mandatory columns and 9 optional semantically meaningful columns. Most surveys are only written with a subset of the available columns. The most up-to-date information can be found on the Surveyman <a href="https://github.com/etosch/SurveyMan/wiki/Csv-Spec">wiki</a>. The mandatory columns are <small>QUESTION</small> and <small>OPTIONS</small>. Column names can appear in any case and any columns that are not semantically meaningful to the SurveyMan runtime system will be pushed through from the input csv to the output csv.</p>
+<p>Columns may appear in any order. Rows are partitioned into questions; all rows belonging to a particular question must be grouped together, but questions may be appear in any order. Questions use multiple rows to represent different answer options. For example, if a question asks what your preferred ice cream flavor is and the options are vanilla, chocolate, and strawberry, each of these will appear in their own row, with the exception of the first option, which will appear on the same row as the question. More formally, if we let the csv be represented by a dictionary indexed on column name and row numbers, then for Survey $$S$$ having column set $$c$$, some question $$Q_i$$ spanning rows $$\lbrace i, i+1, ..., j\rbrace, i &lt; j $$, would be represented by a $$|c|\times (j - i + 1)$$ matrix: $$S[:][i:j+1]$$, and its answer options would be a vector represented by $$S[OPTIONS][i:j+1]$$.</p>
+<h4>Display and Quality Control Abstractions</h4>
+<p>The order of the successive rows in a question matters if the order of the options matter. In our ice cream example, the order does not matter, so we may enter the options in any order. If we were instead to ask "Rate how strongly you agree with the statement, 'I love chocolate ice cream.'", the options would be what's called a <a href="http://en.wikipedia.org/wiki/Likert_scale">Likert scale</a>. In this case, the order in which the options are entered is semantically meaningful. The <small>ORDERED</small> column functions as a flag for this interpretation. Its default value is false, so if the column is omitted entirely, every question's answer options will be interpreted as unordered.</p>
+<p>We do not express display properties in the csv at all. We will discuss how questions are displayed in the <a href="#runtime">runtime section</a> of this post. We had considered adding a <small>CLASS</small> column to the csv to associate certain questions with individual display properties, but this would have the effect of not only introducing, but encouraging non-uniformity in the question display. This introduces additional factors that we would have to model in our quality control. Collaborators who are interested in running web experiments are the most keen on this feature; as we expand from surveys into experiments, we would need to understand what kinds of features they hope to implement with custom display classes, and determine what the underlying abstractions are.</p>
+<p>That said, it happens that two columns we use for quality control also provides once piece of meaningful display information. <small>EXCLUSIVE</small> is a boolean-valued column indicating whether a respondent can only pick one of the answer options, or if they can choose multiple answer options. When <small>EXCLUSIVE</small> is true for a question, its answer options appear as a radio button inputs and for $$m$$ options, the total number of unique responses is $$m$$. When <small>EXCLUSIVE</small> is set to false, the answer options appear as radio buttons and the total number of unique responses is $$2^m - 1$$ (we don't allow users to skip over answering questions). We also support a <small>FREETEXT</small> column, which can be interpreted as a boolean-valued column or a regular expression. When <small>FREETEXT</small> ought to represent a regular expression $$r$$, it should be entered into the appropriate cell as $$\#\lbrace r \rbrace$$.</p>
+<p>We also provide a <small>CORRELATED</small> column to assist in quality control. Our bug detection checks for correlations between questions to see if any redundancy can be removed. However, sometimes correlations are desired, whether to confirm a hypothesis or as a form of quality control. We allow sets of questions to be marked with an arbitrary symbol, indicating that we expect them to be correlated. As we'll discuss in later posts, this information can be critical in identifying human adversaries.</p>
+<h4 id="control_flow">Control Flow</h4>
+<p>Prior work on survey languages has focused on how surveys, like programs, have control flow. We would be remiss in our language design if we failed to address this.</p>
+<p>The most basic survey design is a flat survey. The default behavior in SurveyMan is to randomize the order of the questions. This means that for a survey of $$n$$ questions, there are $$n$$ factorial possible orderings (aside : WordPress math mode doesn't allow "!"?!?!?). It is not always desirable to display one of every possible ordering to a respondent. There are cases where we will want to group questions together. These groups are called "blocks."</p>
+<p>Blocks are a critical basic unit for both surveys and experiments. Conventional wisdom in survey design dictates that topically similar questions be grouped together. We recently launched a survey on wage negotiation that has three topical units : demographic information, work history, and negotiation experience. Experiments on learning require a baseline set of questions followed by the treatment questions and follow-up questions. Question can be grouped together using the <small>BLOCK</small> column.</p>
+<p>Blocks are represented by the regular expression <code> _?[1-9][0-9]*(\._?[1-9][0-9]*)* </code>. Numbering begins at 1. Like an outline, the period indicates hierarchy: blocks numbered 1.1 and 1.2 are contained in block 1. We can think of block numbers as arrays of integer. We define the following concepts:</p>
+<p><code><br />
+function <b>depth</b><br />
+&nbsp; input : A survey block<br />
+&nbsp; output : integer indicating depth<br />
+begin<br />
+&nbsp; idArray &lt;- block id as an array<br />
+&nbsp; return <b>length</b>(idArray)<br />
+end<br />
+</code></p>
+<p><code><br />
+function <b>questionsForBlock</b><br />
+&nbsp; input : A surveyBlock<br />
+&nbsp; output : A set of questions contained in this particular block<br />
+begin<br />
+&nbsp; topLevelQuestions &lt;- a list of questions contained directly in this block<br />
+&nbsp; subblocks &lt;- all of the blocks contained in this block<br />
+&nbsp; blocks &lt;- return value initialized with topLevelQuestions<br />
+&nbsp; for block in subblocks<br />
+&nbsp; do<br />
+&nbsp; &nbsp; blocks &lt;- blocks + questionsForBlock(block)<br />
+&nbsp; done<br />
+&nbsp; return blocks<br />
+end<br />
+</code></p>
+<p>We can say that blocks have the following two properties:</p>
+<ul>
+<li><b> Ordering </b> : Let the id for a block $$b$$ of depth $$d$$ be represented by an array of length $$d$$, which we shall call $$id$$. Let $$index_d$$ be a function of a question representing its dynamic index in the survey (that is, the index at which the question appears to the user). Then the block ordering property states that 
+<p>
+$$\forall b_1 \forall b_2 \bigl( d_1 = d_2 \; \wedge \; id_{b_1}[\mathbf{\small depth}(b_1)-1] &lt; id_{b_2}[\mathbf{\small depth}(b_2)-1] \; \longrightarrow \quad \forall q_1 \in \mathbf{\small questionsForBlock}(b_1)\;\forall q_2 \in \mathbf{\small questionsForBlock}(b_2) \; \bigl( index_d(q_1) &lt; index_d(q_2) \bigr) \bigr)$$</p>
+<p>This imposes a partial ordering on the questions; top level questions in a block may appear in any order, but for two blocks at a particular depth, all of the questions in the lower numbered block must be displayed before any of the questions in the block at the higher number.
+</li>
+<li><b> Containment</b> : If there exists a block $$b$$ of depth $$d &gt; 1$$, then for all $$i$$ from 0 to $$d$$, there must also exist blocks with ids $$[id_b[0]],..,[id_b[0],.., id[d-1]]$$. Each of these blocks is said to contain $$b$$. If $$b_1$$ is a containing block for $$b_2$$, then for all top level questions $$q_1$$ in $$b_1$$, it is never the case that<br />
+$$\exists q_i, q_j, q_k \bigl(\lbrace q_i, q_j \rbrace \subset \mathbf{\small questionsForBlock}(b_2) \; \wedge \; q_k \in  \mathbf{\small questionsForBlock}(b_1) \; \wedge \; index_d(q_i) &lt; index_d(q_k) &lt; index_d(q_j)$$<br />
+That is, none of the top level questions may be interleaved with a subblock's question. Note that we do not require the survey design to enumerate containing blocks if they do not hold top-level questions.
+</li>
+</ul>
+<p>Sometimes what a survey designer really wants is a grouping, rather than an ordering. Consider the two motivating examples. It's clear for the psychology experiment that an ordering is necessary. However, the wage survey does not necessarily need to be ordered; it just needs to keep the questions together. If a survey designer would like to relax the constraints of an ordering, they can prefix the block's id with an underscore at the appropriate level. For a block numbered 1.2.3, if we change this to _1.2.3, then all other members of block 1 will need to have their identifiers modified to _1. If we were instead to change 1.2.3 to 1.2._3, then this block would be able to move around inside block 1.2 under the same randomization scheme as block 1.2's top level questions. Note that you cannot have a randomized block _n and an unrandomized block n. </p>
+<p>Our last column to consider is the <small>BRANCH</small> column. Branching is when different choices for a particular question's answers lead to different paths through the survey. The main guarantee we want to preserve with branching is that the set of nodes in a respondent's path through the survey depends solely on their responses to the questions, not the randomization. </p>
+<p>The contents of the <small>BRANCH</small> column are block ids associated with the branch destination. There can be exactly one branch question per top level block. This ensures the path property mentioned above. The <small>BRANCH</small> column also doubles as a sampling column. We permit one special branch case, where a block contains no subblocks and all of its top level questions are branch questions. In this case, the block is treated as a single question, whose value is selected randomly. If the resulting distributions of answers for the questions in this block are not determined to be drawn from the same underlying distribution, the system flags the block. Since the assumption is that all of the questions are semantically equivalent, the contents of the <small>BRANCH</small> column must be identical for each question. If the user does not want to branch to a particular location, but instead wants the user to see the next question (as with a free, top-level question), then <small>BRANCH</small> can be set to the keyword NULL.</p>
+<p>We currently only allow branching to a top-level block, but are considering weakening this requirement. </p>
+<h4>Deprecated and Forthcoming Columns</h4>
+<p>The psycholinguistic surveys we've been running often require external files to be played. Non-text media are also often used in other web experiments. We had previously supported a <small>RESOURCE</small> column that would take a URL and display this under the question. Since the question column supports arbitrary HTML, it seemed redundant to include the <small>RESOURCE</small> column. These stimuli are part of the question, so separating them out didn't make much sense. While the current code still supports this column, it will not in the future.</p>
+<p>Another column that we are considering deprecating is the <small>RANDOMIZE</small> column. We see two issues with this column : first of all, there has been some confusion about whether it referred to randomizing the question's answer options or if it referred to allowing the question's order to be randomized. It referred to the former, since question order randomization is handled by the <small>BLOCK</small> column. Secondly, we do not see any use-case for not randomizing the question options. It would exist to satisfy a client who has no interest in our quality control techniques.</p>
+<p><a href="http://people.umass.edu/ppizzo/">Presley</a> has suggested adding a <small>CONDITION</small> column, for use in web experiments. This addition is tempting; I would first need to consider whether the information it provides is already captured by the <small>CORRELATED</small> column (or whether we should simply rename the <small>CORRELATED</small> column <small>CONDITION</small> and add some additional behavior to the execution environment).</p>
+<h3 id="runtime">Runtime System</h3>
+<p><!--The basic building block of both surveys and experiments is a question-answer pair. Every survey or experiment</p>
+<p>address customization --><br />
+Okay, this blog post is too long already...runtime post forthcoming!</p>

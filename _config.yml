@@ -1,0 +1,11 @@
+# Site settings
+title: Emma Tosch
+email: etosch@cs.umass.edu
+url: "http://cs.umass.edu/~etosch" 
+twitter_username: emmatosch
+github_username:  etosch
+
+# Build settings
+markdown: kramdown
+paginate: 5
+gem: jekyll-paginate

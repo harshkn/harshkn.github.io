@@ -1,0 +1,21 @@
+---
+layout: post
+title: Rethinking Survey Entropy
+date: 
+type: post
+published: false
+status: draft
+categories: []
+tags: []
+meta:
+  _edit_last: '20775'
+author:
+  login: etosch
+  email: etosch@cns.umass.edu
+  display_name: Emma Tosch
+  first_name: Emma
+  last_name: Tosch
+---
+<p>We currently use entropy to classify bots in our surveys. I'll eventually get to a post on the various methods we tried, their ROC curves, and their mathematical justifications, but for now let's just say that using entropy and an entropy-like calculation had the most consistent error rate across runs. </p>
+<p>We report maximum entropy as one of the static analyses on surveys. I would like to run a simulation that randomly generates surveys of varying structure and investigate further the relationship between entropy, survey structure, bot detection, and other bug detection. </p>
+<p>One of the features that makes analysis of entropy of surveys nontrivial is that we permit breakoff. At what point do we rule legitimate respondents who break off early equivalent to bots who answer randomly? What percentage of bad actors can we tolerate before we cannot tell the difference between friend and foe? Our first impulse was to try to normalize the entropy calculation: since the number of bits needed to represent a survey is a function of its length (as well as the distribution of answers per question), we run into a problem when we're looking for respondents who require more bits to represent the survey. Why more bits you say? Because in the case where everyone answers the entire survey, we are interested in those whose responses look the most like a random respondent. Unfortunately, in the case where many respondents break off, those who stick it out are flagged as bots. We saw this happen with the wage survey : respondents who answered the most questions (none which were the complete set of questions </p>

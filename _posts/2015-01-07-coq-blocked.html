@@ -1,0 +1,60 @@
+---
+layout: post
+title: Coq Blocked
+date: 2015-01-07 12:28:05.000000000 -05:00
+type: post
+published: true
+status: publish
+categories:
+- Coq
+- Formal Methods
+tags: []
+meta:
+  _edit_last: '20775'
+author:
+  login: etosch
+  email: etosch@cns.umass.edu
+  display_name: Emma Tosch
+  first_name: Emma
+  last_name: Tosch
+---
+<p>Some time ago <a href="http://cs.umass.edu/~cibelemf">Cibele</a> and I were working on a fun logic project that involved encoding classical logic in Coq. Perhaps it seems odd that we would write a logic language in language that has a logic already encoded in it, but this is a classic application of PL goodness (i.e., nonsense): we used Gallina as our meta language to encode the primitives of our target language (propositional logic, for starters). You can see the fruits of our efforts <a href="https://github.com/etosch/logic">here</a>.</p>
+<p>Our initial goal was to be able to prove the first homework assignment using just Coq. We needed to define concepts such as suitability, satisfiability, validity, etc. We ran into problems during our first pass because we tried to define everything as a function, which doesn't lend itself to proofs. </p>
+<p>In order to proof even the most simple theorems, we needed to define the concept of suitability. We started by defining atomic formulae and assignments:</p>
+
+{% highlight coq %}    
+Inductive atomic :=
+| A : nat -> atomic.
+
+Definition assignment : Set := list (atomic * bool).
+
+{% endhighlight %}
+
+<p>Many of things we wanted to prove relied on an assignment being suitable for a formula. However, we did not want to have to traverse the assignment or prove suitability or a number of trivial cases each time we needed suitability. Our initial pass used option types extensively, but this made many of the proofs cumbersome and unruly. It also lead us astray on more complicated proofs. So, we defined some concepts with dependent types to clean things up a bit:</p>
+
+{% highlight coq %}
+
+Fixpoint in_assignment n (a : alist) : Prop :=
+match a with
+| nil => False
+| (h,_)::t => if beq_nat n h
+then True
+else in_assignment n t
+end.
+
+Lemma in_empty : forall a, in_assignment a nil -> False.
+intros; compute in H; apply H.
+Qed.
+
+Fixpoint find_assignment n (a : alist) : in_assignment n a -> bool :=
+match a with
+| nil => fun pf => match (in_empty n) pf with end
+| (h, tv)::t => if beq_nat h n
+then fun _ => tv
+else find_assignment n t
+end.
+
+{% endhighlight %}
+
+<p>The above defines a function, <code>find_assignment</code> that gets around using option types. If we could get the above to work, then we could use <code>in_assignment</code> to define suitability and replace <code>in_assignment n a</code> with <code>suitable n a</code>. You can see a discussion of the problem at this <a href="https://gist.github.com/etosch/76f56c1114418339d6e0">gist</a>, where we simplified assignments to be an associative list, so we wouldn't have to worry about atomic types. </p>
+<p>The main problem, as discussed on the gist, is that we needed to apply a proof in the inductive case of <code>find_assignment</code>. We couldn't figure out how to do this because we were focused on finding errors in <code>find_assignment</code>. The problem with our code was actually in <code>in_assignment</code>: we were using <code>beq_nat</code> to evaluate down to a boolean, rather than using a proposition that employed sumbool (which would give us a bunch of decidibility theorems for free). </p>
