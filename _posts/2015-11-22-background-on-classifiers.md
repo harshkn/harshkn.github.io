@@ -3,7 +3,7 @@ layout: post
 title: Background on Classifiers
 date: 2015-11-22 00:00:00
 published: true
-status: draft
+status: published
 tags: [surveyman]
 author:
   display_name: Emma Tosch

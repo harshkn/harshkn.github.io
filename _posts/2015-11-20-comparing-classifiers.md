@@ -4,7 +4,7 @@ title: Comparing Classifiers
 date: 2015-11-23 16:36:00
 tags: [surveyman]
 ispublished: false
-status: publish
+status: draft
 author:
   display_name: Emma Tosch
 ---
