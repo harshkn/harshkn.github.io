@@ -1,8 +1,5 @@
 <footer class="site-footer">
-
   <div class="wrapper">
-
-    <h2 class="footer-heading">{{ site.title }}</h2>
 
     <div class="footer-col-wrapper">
       <div class="footer-col footer-col-1">
@@ -13,7 +10,7 @@
         </ul>
       </div>
 
-      <div class="footer-col footer-col-2">
+      <div class="footer-col footer-col-1">
         <ul class="social-media-list">
           {% if site.github_username %}
           <li>
@@ -29,9 +26,10 @@
         </ul>
       </div>
 
-      <div class="footer-col footer-col-3">
-        <p>{{ site.description }}</p>
+      <div class="footer-col footer-col-2">
+	<p class="rss-subscribe">Blog <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
       </div>
+
     </div>
 
   </div>
