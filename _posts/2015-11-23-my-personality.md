@@ -8,7 +8,7 @@ author:
   display_name: Emma Tosch
 ---
 
-To get a sense of a background paper on identifying careless responses, I took their personality inventory. For funsies, here's what it came back and said. My non-average traits are:
+To get a sense of a background paper on identifying careless responses, I took their [personality inventory](http://www.personal.psu.edu/~j5j/IPIP/ipipneo300.htm). For funsies, here's what it came back and said. My non-average traits are:
 
 | Domain | Subdomain | High | Low |
 | --- | ---: | :---: | :---: |

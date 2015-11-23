@@ -2,7 +2,7 @@
 layout: post
 title: Background on Classifiers
 date: 2015-11-22 00:00:00
-published: false
+published: true
 status: draft
 tags: [surveyman]
 author:
@@ -89,11 +89,41 @@ Meade and Craig make the following contributions:
     > sample using both latent profile analysis and factor mixture modeling,
     > revealing data patterns common among careless responders.
 
-	It wasn't entirely clear to me how they did this. They say that "raw item-level data matrix" is very large. Presumably this meant that there were many questions with many options. Here is the setup: the authors administered a 300-item personality test (the [International Personality Item Pool (IPIP)](http://ipip.ori.org/)). I took a version of the test [here](http://www.personal.psu.edu/~j5j/IPIP/ipipneo300.htm). It's 300 questions, each on a 5-point Likert scale. Some of the questions were clearly rephrasings of the synonymous or antonymous versions of other questions. 
+    It wasn't entirely clear to me how they did this. They say that "raw item-level data matrix" is very large. Presumably this meant that there were many questions with many options. Here is the setup: the authors administered a mix of several personality assessments. One of them was a 300-item personality test (the [International Personality Item Pool (IPIP)](http://ipip.ori.org/)). I took a version of the test [here](http://www.personal.psu.edu/~j5j/IPIP/ipipneo300.htm). Some of the questions were clearly rephrasings of the synonymous or antonymous versions of other questions, meant to build in some redundancy to increase accuracy. You can see an example of the assessment that's returned in [a previous post]({% post_url 2015-11-23-my-personality %}). This is what the text says:
+
+    > Recent evidence suggests that Mahalanobis
+    > distance can be effective at identifying inattentive responses
+    > (Ehlers et al., 2009). Given the large size of the raw item-level data
+    > matrix, using all survey items simultaneously would have been
+    > computationally intensive. Instead, five Mahalanobis distance
+    > measures were computed for each respondent, one for each of the
+    > five broad personality factors (60 items per factor). The correlations
+    > among the five Mahalanobis distance measures were in
+    > excess of .78 (p < .05) and were averaged to a single Mahalanobis
+    > distance value.
+
+    It looks like they took the codings for each of the personality domains and clustered those questions together before performing outlier analysis. In the past, the only mechanism we have given survey writers to describe clusters in their surveys has been the correlation column, which allows them to tag questions. Here is my best guess for the procedure they used: every 7-point scale is treated as  a random variable. Each question has as tag known *a priori* indicating which of the five measures it belongs to. For each measure (i.e. domain), it treats some set of questions that measure that domain as its own dimension. For the 300-question inventory I took, this gives us approximately 60 questions per domain -- therefore, it gives us a 60-dimensional space in which we need to find the center. Note that the analysis requires that the space we are analyzing be $$\mathbb{R}^{60}$$. (It isn't clear if the 60 questions that would make up one of these factors are they same 60 questions that make up their analyses, since they used a series of personality tests).
+
+    <!--
+**Digression:** Many analyses have a mismatch between the scale we use to measure and the true, underlying scale we wish to estimate. Regression analysis works best when we are at least on an *interval scale*, if not a *ratio scale* of measurement. What this means is that we at least need to be able to make meaningful arguments about the sizes of differences between measurements, and it would be even better if there were a meaningful notion of what zero means. Self-assessment via Likert scales presents three major measurement issues: (1) it requires that the user discretize their response, (2) scales are individualized and therefore potentially incomparable across subjects and (3) the lack of objectivity (these instruments ask people how they feel
+-->
+
+    **Side Note:** I think the alternative analysis they were talking about might have to look at outliers from the center of a 300-dimensional random variable. Instead, they averaged these 5 60-dimensional ones. Note that we can construct an example where these two methods are not equivalent.
+
+    Anyway, I see three main ways we can use Mahalanobis distance in SurveyMan:
+
+    1. **As part of the cluster classifier.** Right now, we try to cluster all responses into *valid* and *invalid*. I've rotated through several ways of using it, and right now we inject sufficient known random respondents so that we have at least 10% bad actors, and use the majority of respondents in a cluster to determine the cluster's classification (where "real" data is initially classified as unknown, but gets counted as valid). I've also used it in the "stacked" strategy, which first clusters, then labels using the LPO strategy, and again uses the majority label of the cluster to update the labels on the remaining cluster. I see Mahalanobis distance as useful to update the score for individual responses. At the moment, we don't have a summary statistic to attach to each response, so comparing within the cluster isn't easy. Adding Mahalanobis distance for each response from the distribution should help.
+	2. **As its own classifier**. I'm not really sold on this one, but we could just treat an $$n$$-question survey as an $$n$$-dimensional random variable. It isn't great for heterogeneity in responses, but if we break out the analysis by path (which we should be doing anyway), it might work nicely.
+	3. **In conjunction with user-provided correlation labels.** This I think would be really cool. It would basically be the same strategy as what this paper is suggesting, where, if the psychometric questionnaire the paper uses were a SurveyMan program, we would just label the questions with their appropriate domain.
+
+    The authors were also interested in whether there were different types of careless respondents. They did a "latent factor analysis," which so far as I can tell was something like PCA on the "indices." In particular, since they were using a psychometric survey, they wanted to see if there was some correlation between the subdomains of agreeableness and the indices they tabulated. This isn't particularly generalizable to SurveyMan, but is clearly of interest to people who run psychometric surveys. 
+
 
 3. 
     > ... we provide an estimate to the prevalence of careless responding
     > in undergraduate survey research samples.
+
+    They reported 10-12% careless responses. 
 
 4. 
     > ... we
@@ -101,8 +131,10 @@ Meade and Craig make the following contributions:
     > well as the efficacy of response time and self-report indicators of
     > careless responding.
 
+    They performed some nice simulations with injected data and generally found what you would expect -- when responses are clearly clustered (uniform random vs. true or gaussian random vs. true), it's much easier to identify careless responses than when a given respondent exhibits a mixture of behavior. In SurveyMan, we try to use the option of submitting early as a proxy for self-classification of the time of the changepoint when a respondent goes from being conscientious to being careless. 
 
-We'll see if we can validate some of these contributions in simulation and work them into SurveyMan's classifier system. 
+
+We'll see if we can validate some of these contributions in simulation and work them into SurveyMan's classifier system. One thing I would like to note is that there was no discussion of partitioning or resampling the data for the hypothesis tests. There are *a lot* of hypotheses being tested in this paper. However, it's pitched in an exploratory way, and there aren't any strong recommendations that come out of the paper, so I am not too bothered by it.
 
 
 Note: [Gelman](http://www.stat.columbia.edu/~gelman/) [posted a response](http://andrewgelman.com/2015/11/16/just-filling-in-the-bubbles/) from [someone](http://www.uaedreform.org/collin-hitt/) who is currently looking at [the effect of non-cognitive tasks on standardized test performance](http://www.uaedreform.org/downloads/2015/07/edre-working-paper-2015-06.pdf). I only skimmed this paper, but standardized testing might be a good way to test the effectiveness of our classifiers in the wild. 
