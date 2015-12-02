@@ -204,3 +204,45 @@ pre {
         }
     }
 }
+
+/**
+ * http://stackoverflow.com/questions/1718951/jquery-how-can-i-create-a-simple-overlay
+ */
+.overlay {
+    position: fixed;
+    top: 100px;
+    left: 100px;
+    right: 100px;
+    bottom: 100px;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -o-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -khtml-border-radius: 10px;
+    border-radius: 10px;
+}
+
+.overlay > ul {
+    position: fixed;
+    margin-top: 30px;
+    margin-left: 50px;
+    font-weight: bold;
+    font-size: 20pt;
+    list-style-type: none;
+}
+
+.overlay > ul > li {
+    color: white;
+    border: 5px solid black;
+    background-color: rgba(0,0,0, 0.7);
+    margin-top: 5px;
+    margin-bottom: 5px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -o-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -khtml-border-radius: 10px;
+
+}

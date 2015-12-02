@@ -18,21 +18,35 @@ author:
   first_name: Emma
   last_name: Tosch
 ---
-<p>One of the arguments we keep making about SurveyMan is that our approach allows us to debug surveys. We talk about the specific biases (order, wording, sampling) that skew the results, but one thing that we don't really emphasize in the tech report is what it really means for a survey to be correct. Here I'd like to tease out various notions of correctness in the context of survey design.</p>
-<h3>Response Set Invariant</h3>
-<p>Over the past few months, I've been explaining the central concept of correctness as one where we're trying to preserve an invariant: the set of answers returned by a particular respondent. The idea is that if this universe were to split and you were not permitted to break off, the you in Universe A would return the same set of answers as the you in Universe B. That is, your set of answers should be invariant with respect to ordering, branching, and sampling. </p>
-<blockquote><p>
-<img src="{{ site.baseurl }}/assets/capt-kirk_yellowCU-001_1196284873.jpg" width="50%" height="50%" align="left" class /><img src="{{ site.baseurl }}/assets/bilde?Site=C4&amp;Date=20130203&amp;Category=ENT01&amp;ArtNo=130203012&amp;Ref=AR&amp;Border=0" width="50%" height="50%" align="right" class /><br />
+One of the arguments we keep making about SurveyMan is that our approach allows us to debug surveys. We talk about the specific biases (order, wording, sampling) that skew the results, but one thing that we don't really emphasize in the tech report is what it really means for a survey to be correct. Here I'd like to tease out various notions of correctness in the context of survey design.
+
+#Response Set Invariant
+
+Over the past few months, I've been explaining the central concept of correctness as one where we're trying to preserve an invariant: the set of answers returned by a particular respondent. The idea is that if this universe were to split and you were not permitted to break off, the you in Universe A would return the same set of answers as the you in Universe B. That is, your set of answers should be invariant with respect to ordering, branching, and sampling. 
+
+![The Real Kirk]({{ site.baseurl }}/assets/capt-kirk_yellowCU-001_1196284873.jpg){:style="width=50%; align=left"}
+![This guy]({{ site.baseurl }}/assets/pine.jpeg){:style="width=50%; align=right"}
 These guys should give the same responses to a survey, up to the whole timeline split thing.
-</p></blockquote>
+
+
 <p><b>Invalidation via biases</b> Ordering and sampling can be flawed and when they are, they lead to our order bias and wording bias bugs. Since we randomize order, we want to be able to say that your answer to some question is invariant with respect to the questions that precede it. Since we sample possible wordings for variants, we want to be able to say that each question in an <code>ALL</code> block is essentially "the same." We denote "sameness" by treating each question wording variant as exchangeable and aligning the answer options. The prototypicality survey best illustrates variants, both in the question wording and the option wording:</p>
+
+{{% insert {{ site.baseurl }}/_tablepress_tables/2014-06-18-prototypicality-csv.html %}}
+![prototypicality]( {{ site.baseurl }}/_tablepress_tables/2014-06-18-prototypicality-csv.html)
 <p>[table id=5 /]</p>
-<p><b>Invalidation via runtime implementation</b> Clearly ordering and sampling are typical, well-known biases that we are framing as survey bugs. These bugs violate our invariant. We have also put restrictions on the survey language in order to preserve this invariant. I <a href="http://blogs.umass.edu/etosch/2014/03/21/regarding-survey-paths/">discussed</a> these restrictions <a href="http://blogs.umass.edu/etosch/2014/03/19/static-analysis/">previously</a>, but didn't delve into their relationship with correctness. In order to understand the correctness of a survey program, we will have to talk a little about semantics.</p>
-<p>Generally when we talk about language design in the PL community, we have two sets of rules for understanding a language: the syntax and the semantics. As with natural language, the syntax describes the rules for how components may be combined, whereas the semantics describes what they "really mean". The more information we have encoded in the syntax, the more we can check at compile time -- that is, before actually executing the program. At its loosest, the syntax describes a valid surface string in the language, whereas the semantics describes the results of an execution. </p>
-<p>When we want "safer" languages, we generally try to encode more and more information in the syntax. A common example of this is type annotation. We can think of this extra information baked into the language's syntax as some additional structure to the program. Taking the example of types, if we say some variable <code>foo</code> has type <code>string</code> and then try to use it in a function that takes type <code>number</code>, we should fail before we actually load data into <code>foo</code> -- typically before we begin executing the program.</p>
-<p>In SurveyMan, these rules are encoded in the permitted values of the boolean columns, the syntax of the block notation, and the permitted branch destinations. Let's first look at the syntax rules for SurveyMan.</p>
-<h6><a href="#syntax">SurveyMan Syntax : Preliminaries</a></h6>
-<p>
+
+# Invalidation via runtime implementation
+
+Clearly ordering and sampling are typical, well-known biases that we are framing as survey bugs. These bugs violate our invariant. We have also put restrictions on the survey language in order to preserve this invariant. I <a href="http://blogs.umass.edu/etosch/2014/03/21/regarding-survey-paths/">discussed</a> these restrictions <a href="http://blogs.umass.edu/etosch/2014/03/19/static-analysis/">previously</a>, but didn't delve into their relationship with correctness. In order to understand the correctness of a survey program, we will have to talk a little about semantics.
+
+Generally when we talk about language design in the PL community, we have two sets of rules for understanding a language: the syntax and the semantics. As with natural language, the syntax describes the rules for how components may be combined, whereas the semantics describes what they "really mean". The more information we have encoded in the syntax, the more we can check at compile time -- that is, before actually executing the program. At its loosest, the syntax describes a valid surface string in the language, whereas the semantics describes the results of an execution.
+
+When we want "safer" languages, we generally try to encode more and more information in the syntax. A common example of this is type annotation. We can think of this extra information baked into the language's syntax as some additional structure to the program. Taking the example of types, if we say some variable <code>foo</code> has type <code>string</code> and then try to use it in a function that takes type <code>number</code>, we should fail before we actually load data into <code>foo</code> -- typically before we begin executing the program.
+
+In SurveyMan, these rules are encoded in the permitted values of the boolean columns, the syntax of the block notation, and the permitted branch destinations. Let's first look at the syntax rules for SurveyMan.
+
+##<a href="#syntax">SurveyMan Syntax : Preliminaries</a>
+
 Before we define the syntax formally, let us define two functions we'll need to express our relaxed orderings over questions, blocks, and column headers:</p>
 <p>$$ \sigma_n : \forall (n : int), \text{ list } A \times n \rightarrow \text{ list } A \times n$$</p>
 <p>This is our random permutation. Actually, it isn't *really* a random permutation, because we are not using the randomness as a resource. Instead, we will be using it more like a nondeterministic permutation (hence the subscript "n"). We will eventually want to say something along the lines of "this operator returns the appropriate permutation to match your input, so long as your input is a member of the set of valid outputs." $$\sigma_n$$ takes a list and its length as arguments and returns another list of the same length. We can do some hand-waving and say that it's equivalent to just having a variable length argument whose result has the same number of arguments, so that</p>

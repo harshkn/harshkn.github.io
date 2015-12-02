@@ -1,8 +1,8 @@
 <footer class="site-footer">
   <div class="wrapper">
-
     <div class="footer-col-wrapper">
-      <div class="footer-col footer-col-1">
+      
+      <div class="footer-col" style="margin-right:15px;">
         <ul class="contact-list">
           <li>{{ site.title }} [ <a href="cv.pdf">C.V.</a> ]
 	  </li>
@@ -10,7 +10,7 @@
         </ul>
       </div>
 
-      <div class="footer-col footer-col-1">
+      <div class="footer-col" style="margin-right:15px">
         <ul class="social-media-list">
           {% if site.github_username %}
           <li>
@@ -26,8 +26,13 @@
         </ul>
       </div>
 
-      <div class="footer-col footer-col-2">
-	<p class="rss-subscribe">Blog <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
+      <div class="footer-col" style="">
+	<ul class="contact-list">
+	  <li class="rss-subscribe">Blog <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></li>
+	  <li><form action="get" id="site_search">
+	  <label for="search_box">Search&nbsp;&nbsp;</label><input type="text" id="search_box">
+	  <input type="submit" value="search" class="btn">
+	</form></li>
       </div>
 
     </div>
