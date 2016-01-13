@@ -4,6 +4,7 @@ date: 2015-11-23 10:39:00
 title: My Personality
 status: publish
 published: true
+permalink: my_personality.html
 author:
   display_name: Emma Tosch
 ---
