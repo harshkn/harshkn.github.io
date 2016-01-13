@@ -2,9 +2,8 @@
 layout: post
 title: Online Experiments
 permalink: online_experiments.html
-excerpt: <!-- summary -->
 author:
-- display_name: Emma Tosch
+  display_name: Emma Tosch
 ---
 
 Wherein we discuss field experiments, controlled experiments, and online experiments. Includes a discussion of infrastructure for online experiments.

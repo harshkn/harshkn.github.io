@@ -3,6 +3,7 @@ layout: default
 ---
 
 <div class="posts-list">
+
   {% for post in paginator.posts %}
   <article class="post-preview">
 
@@ -19,10 +20,7 @@ layout: default
       Posted on {{ post.date | date: "%B %-d, %Y" }} 
 
     <div class="post-entry">
-      {% if post.thumbnail %}
-      <img class="thumbnail" style='background-image: url({{ post.thumbnail }});'></img>
-      {% endif %}
-      {{ post.content | truncatewords: 100 | strip_html}}
+        {{ post.excerpt }}
       <a href="{{ post.url | prepend: site.baseurl }}" class="post-read-more">[Read&nbsp;More]</a>
     </div>
     <br/><br/>
