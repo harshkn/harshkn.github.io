@@ -67,6 +67,5 @@ Although the above may not seem as serious as, say, correctness issues, they act
 
 # General costs when experiments are buggy
 
-In general, errors in experiments have a cascading effect. There are financial costs, associated with ad revenue (a necessary consideration, since for many online ecosystems, this is their primary source of funding). There are human-costs, such as poor user experiences [^n]. There is also the cost of time -- time wasted by analysts and engineers on data and experimental setups that that are flaws.
+In general, errors in experiments have a cascading effect. There are financial costs, associated with ad revenue (a necessary consideration, since for many online ecosystems, this is their primary source of funding). There are human-costs, such as poor user experiences. There is also the cost of time -- time wasted by analysts and engineers on data and experimental setups that that are flaws.
 
-[^n]: I can't believe I'm about to do this, but I'm going to take the opportunity to defend a giant capitalist corporation. Recently Facebook was in the news for 

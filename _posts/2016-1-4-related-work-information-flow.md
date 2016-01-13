@@ -74,7 +74,7 @@ Importantly, refiners cannot model behavior that depends on dynamic factors. The
 
 The authors model probabilistic choice as a refinement (i.e., a less under-specified version) of nondeterministic choice. They define a measure space on program trees and specify a Borel set for rays (i.e., maximal execution sequences of programs). Equivalence of traces depends only on pointwise equivalence of configurations and measures.
 
-TODO: GO THROUGH THIS SECTION MORE CAREFULLY
+<!-- TODO: GO THROUGH THIS SECTION MORE CAREFULLY -->
 
 # A Sound Type System
 
@@ -84,7 +84,7 @@ Noninterference is often intractable!
 
 Soundness theorem.
 
-TODO: GO THROUGH THIS SECTION MORE CAREFULLY
+<!-- TODO: GO THROUGH THIS SECTION MORE CAREFULLY -->
 
 # Related Work
 
