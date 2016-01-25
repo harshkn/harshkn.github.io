@@ -19,7 +19,11 @@ author:
   last_name: Tosch
 ---
 <p>This is going to be a short post that I'll expand on more, post-portfolio...</p>
+
 <p>One of the nice features of <a href="http://www.automan-lang.org">AutoMan</a> is that it manages the pricing of a task for you. The user only needs to specify a maximum amount they're willing to pay, and AutoMan will return the result at the optimal price. It first computes the number of agreeing responses needed to have high confidence that the result is correct. Then it starts at an initial baseline assignment duration (i.e. the time expected to complete the task). The initial duration may be provided by the user; the default setting is 30 seconds. AutoMan uses this time to compute the wage, which is tied to the US federal minimum wage. The assignment is posted on Mechanical Turk for some lifetime set to one hundred times the task duration. If no results come back during that lifetime, it doubles the task time and reposts the job.</p>
+
+<!-- summary -->
+
 <p>Of course, there's one caveat : since AutoMan relies on there being a single answer, if the population is in disagreement, the budget will be used up and no results will be returned. </p>
 <p>One of the original motivations for SurveyMan was to address the idea of returning distributions of results, rather than point estimates of results. We were also interested in computing end-to-end confidence intervals for chained AutoMan computations. We realized that the underlying structure of chained distributions of functions exactly modeled surveys. Thus, SurveyMan.</p>
 <p>SurveyMan today is quite far from this original motivation. Since we began collaborating with social scientists, we veered into experimental design and discovery, rather than static analysis or speculative execution of programs having functions returning probabilistic results. </p>
