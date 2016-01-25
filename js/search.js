@@ -23,12 +23,22 @@ jQuery(function() {
     });
 
     // Event when the form is submitted
-    $("#site_search").submit(function(){
-	event.preventDefault();
-	var query = $("#search_box").val(); // Get the value for the text field
-	var results = window.idx.search(query); // Get lunr to perform a search
-	display_search_results(results); // Hand the results off to be displayed
-    });
+
+    // $("#site_search").submit(function(){
+    // 	event.preventDefault();
+    // 	var query = $("#search_box").val(); // Get the value for the text field
+    // 	var results = window.idx.search(query); // Get lunr to perform a search
+    // 	display_search_results(results); // Hand the results off to be displayed
+    // });
+
+    var search = function () {
+	$("#site_search").submit(function(){
+	    event.preventDefault();
+	    var query = $("#search_box").val(); // Get the value for the text field
+	    var results = window.idx.search(query); // Get lunr to perform a search
+	    display_search_results(results); // Hand the results off to be displayed
+	});
+    }
 
     function display_search_results(results) {
 	// updated this so we would have an overlay instead of a results page

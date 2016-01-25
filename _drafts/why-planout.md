@@ -16,7 +16,7 @@ So what are external operators in this context, and what are they used for? Amon
 External operators may also be used to access external experimentation systems. Facebook has multiple such systems, as do Google and other large companies, who all run many many experiments every day. One of the winning features of PlanOut is that it can be used with existing specialized systems, which helps with internal adoption. For example, suppose there is an existing experimentation system that returns a number in response to the query `MyExpVersion(<id>)`. This call will get a hash of a particular experiment implemented in another system. This other system selects participants and sets parameters in a way that (a) does not clash with the parameters of the PlanOut script, and (b) does not alter the randomization of other random assignments within the PlanOut script. 
 
 # Loggging
-We brought up in the previous post that logging is a major issue for online experiments. The parameters listed in the PlanOut script will be logged, unless the script contains a `return false` statement. Returning from the script short-circuits the experiment, but 
+We brought up in the previous post that logging is a major issue for online experiments. The parameters listed in the PlanOut script will be logged, unless the script contains a `return false` statement. Returning from the script short-circuits the experiment, but the boolean value toggles whether we continue logging. 
 
 ​[11:11]
 “why is this hard? what does planout give you?"

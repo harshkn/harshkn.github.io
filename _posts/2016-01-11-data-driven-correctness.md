@@ -1,8 +1,12 @@
 ---
 layout: post
 title: Data-Driven Correctness
+comments: true
+type: post
+status: publish
+published: true
 author:
-- display_name: Emma Tosch
+  display_name: Emma Tosch
 ---
 
 In the [CheckCell work](htttp://checkcell.org), [Emery](http://cics.umass.edu/~emery) often says "garbage in, garbage out." However, when chatting with [Dan](http://cics.umass.edu/~dbarowy) about this idea, we realized that it was really a specific instance of a more general concept, which I will call "data-driven correctness."

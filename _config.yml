@@ -8,4 +8,8 @@ github_username:  etosch
 # Build settings
 markdown: kramdown
 paginate: 5
-gem: jekyll-paginate
+
+gems:
+- jekyll-lunr-js-search
+- jekyll-paginate
+- jekyll-mentions
