@@ -3,6 +3,7 @@ layout: default
 comments: true
 excerpt: <!-- summary -->
 ---
+
 <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
@@ -19,12 +20,21 @@ excerpt: <!-- summary -->
       
     <div class="PageNavigation">
     {% if page.previous.url %}
-    <a class="prev" href="{{page.previous.url}}"> {{page.previous.title}} &raquo;</a>
+    <a class="prev" href="{{page.previous.url}}"> {{ page.previous.title }} &raquo;</a>
     {% endif %}
     {% if page.next.url %}
-    <a class="next" href="{{page.next.url}}">&laquo; {{page.next.title}} </a>
+    <a class="next" href="{{page.next.url}}">&laquo; {{ page.next.title }} </a>
     {% endif %}
     </div>
   </div>
 
 </article>
+
+TEMPLATE
+{{ page.jsarr }}
+
+{% for js in page.jsarr %}
+<script type="text/javascript">
+  {% include {{ js }} %}
+</script>
+{% endfor %}
