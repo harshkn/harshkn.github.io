@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: Probabilistic PL and Experimentation
 categories:
 - Research
