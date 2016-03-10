@@ -19,7 +19,7 @@ author:
 ---
 Some time ago I started writing up the requirements for a sound crowd sourcing system. Last year I wrote about Amazon's report on using verification tools at scale and it got me thinking about the kinds of abstractions one would need to formally verify a crowdsourcing system.
 
-<!-- summary -->
+<!--summary-->
 
 Before implementing any verification system, it's important to to know what the basic guarantees are -- what invariants we should define, so that we may define what it means for the system to be correct? Crowdsourcing is used in a variety of contexts, and different crowdsourcing systems serve different labor markets. In particular, I will focus on general human intelligence tasks and explicitly will not address specialized markets.</p>
 \nIn particular, I would like to address three rough categories of tasks: point estimation tasks, distribution estimation tasks, and causal inference tasks.</p>

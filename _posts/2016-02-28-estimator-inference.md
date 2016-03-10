@@ -8,7 +8,7 @@ author:
   display_name: Emma Tosch
 ---
 PlanOut programs are just sets of assignments with some conditions imposed on top of them. If we generate the dependencies between parameters in a PlanOut program, we can use this information to determine which contrasts are valid.
-
+<!--summary-->
 All PlanOut programs can be converted into graphs.
 
 From the default example on the [PlanOut editor](http://planout-editor.herokuapp.com/):

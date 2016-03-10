@@ -8,7 +8,7 @@ author:
 
 Wherein we discuss field experiments, controlled experiments, and online experiments. Includes a discussion of infrastructure for online experiments.
 
-<!-- summary -->
+<!--summary-->
 
 I've had a few previous posts on experiments: when we first started the SurveyMan work, I wrote about [observational studies vs. surveys vs. quasi-experiments vs. experiments]({{ base.url }}/obs_survey_quasi_ex.html) and [mused about the differences between experiments and surveys]({{ base.url }}/experiments_vs_surveys.html) (insofar as SurveyMan is concerned). Those prior posts informally discussed qualitative aspects of experiments. They talked about exploratory vs. confirmatory data analysis, testing hypotheses, and the degree of control of confounders that the researcher has.
 

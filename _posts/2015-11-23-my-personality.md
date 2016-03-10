@@ -28,6 +28,7 @@ To get a sense of a background paper on identifying careless responses, I took t
 | Openness to Experience | Liberalism | &#x2714; | |
 
 <br/>
+<!--summary-->
 My favorite qualitative assessment:
 
 > Your score on Openness to Experience is average, indicating you enjoy tradition but are willing to try new things. Your thinking is neither simple nor complex. To others you appear to be a well-educated person but **not an intellectual**. (emph. added)

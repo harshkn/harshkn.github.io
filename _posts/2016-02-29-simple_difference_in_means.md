@@ -7,9 +7,8 @@ author:
 
 When inferring contrasts, we make the simplifying assumption that the unit of randomization is proxy for the experimental subject. We also assume that units are independent of each other and that the parameter of interest can be uniquely determined by the parameters in the program, conditioned on the experimental unit of randomization.
 
-<!-- summary -->
-
 Without more specific domain knowledge, we must treat each PlanOut script as a procedure parameterized by the unit of randomization (i.e., all of the $$r$$ values assigned to the special property $$unit$$ in the random operators) and the parameter of interest (i.e., the dependent variable in the analysis we will do at the end).
+<!--summary-->
 
 # A small amount of background
 

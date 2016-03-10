@@ -11,7 +11,7 @@ On the one hand, PlanOut is straightforward and should be easy to reason about: 
 
 What makes reasoning about PlanOut scripts tricky is that free variables may sit around unevaluated: we may have some expression such that there is no way to simplify it down to a base value without further information from the system. This post describes how the analyzer interprets expressions in the presence of unknown values.
 
-<!-- summary -->
+<!--summary-->
 
 # Boolean Expressions
 

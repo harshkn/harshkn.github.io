@@ -10,7 +10,7 @@ author:
 ---
 
 In the [CheckCell work](htttp://checkcell.org), [Emery](http://cics.umass.edu/~emery) often says "garbage in, garbage out." However, when chatting with [Dan](http://cics.umass.edu/~dbarowy) about this idea, we realized that it was really a specific instance of a more general concept, which I will call "data-driven correctness."
-
+<!--summary-->
 In logic, we have the notion of "suitability."  An _assignment_ in logic is a mapping from variables (or names) to truth values, and an assignment is _suitable_ for a formula if it contains all of the variable names in that formula. One might argue that all correctness in PL comes out of suitability; we need suitability to talk about satisfiability and we use satisfiability to model systems. Formal verification and correctness in PL addresses the complexity of surface strings (i.e., the literal text of programs) and the tension that causes with the semantics of a system, which depends on the machine that interprets computer programs. 
 
 In statistics and machine learning, we say that a formula _models_ the data when it _explains_ the data, and when it can be used in a _predictive_ capacity. (Here is a [link](http://andrewgelman.com/2012/09/04/model-checking-and-model-understanding-in-machine-learning/) to a discussion about the goals and priorities of machine learning and statistics, which I have lumped together in this statement.) As I understand it, correctness in machine learning is empirically driven. ML researchers compare the results of a system against a human-annotated gold standard data set.

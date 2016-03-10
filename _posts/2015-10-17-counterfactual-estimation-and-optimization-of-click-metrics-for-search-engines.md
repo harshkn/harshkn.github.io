@@ -18,6 +18,7 @@ author:
   last_name: Tosch
 ---
 So <a href="http://eytan.github.io/">Eytan</a> suggested <a href="http://research.microsoft.com/pubs/210171/paper-tr.pdf">this paper</a> as a reference for our work on static analysis for PlanOut, but I was recently thinking about how some of the ideas might be ported to SurveyMan. 
+<!--summary-->
 Here is a breakdown of the process/logic of this paper:
 
 

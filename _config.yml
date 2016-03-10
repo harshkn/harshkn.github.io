@@ -4,6 +4,7 @@ email: etosch@cs.umass.edu
 url: "http://cs.umass.edu/~etosch" 
 twitter_username: emmatosch
 github_username:  etosch
+excerpt_separator: <!--summary-->
 
 # Build settings
 markdown: kramdown

@@ -7,7 +7,7 @@ author:
 ---
 When previously discussing [online experiments]({{ base.url }}/online_experiments.html), we talked about randomization errors. In that model, assignment to treatment or control is done by the system that selects user ids. We can think about these assignments as a series of tables. If we want to repeat an experiment, we have re-generate the tables, so we don't end up experimenting on the same exact group every time. It is much more efficient and compact to have a procedure for generating assignments. A procedure also allows us to document the process we used for assignment, and even implies the kind of analyses we intend to do. It can be used for provenance, verification, and program synthesis.
 
-<!-- summary -->
+<!--summary-->
 
 [PlanOut](http://facebook.github.io/planout/) is a domain-specific language with an interpreter specification that provides the compact representation we desire. It has some nice features that facilitate interoperability with the experimental system.
 

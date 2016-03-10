@@ -8,7 +8,7 @@ author:
 When I was chatting with Emery about the effect of the [unit of randomization]({{ base.url }}/units_of_randomization.html)) on [inference of causal estimators]({{ base.url }}/estimator_inference.html), he suggested I look into the information flow literature, since randomization parallels secure information. He initially suggested I look at [Jif](http://www.cs.cornell.edu/jif/), but while perusing [Stephen Chong's publications](http://people.seas.harvard.edu/~chong/publications.html), I came across a different paper that appears to have some important features and properties that we can build on.
 
 This appears to be an older paper (published in 2006). What follows is part summary, part running commentary/reactions.
-
+<!--summary-->
 <!-- First of all, though, I want to note that it should be unsurprising that there is significant related work in secuity and privacy for modeling experimentation. [Recent work]() has shown that properties from differential privacy can be ported to questions of data reuse and testing multiple hypotheses.  -->
 
 ## [Information-Flow Security for Interactive Programs](https://ecommons.cornell.edu/handle/1813/5721)

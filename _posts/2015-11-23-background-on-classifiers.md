@@ -10,7 +10,7 @@ author:
 ---
 
 Sometimes I think we should give up on the classification of bad actors in SurveyMan -- it's a very hard problem and developing solutions feels very far afield from what I want to be doing. Then I see [blog posts like this one](http://andrewgelman.com/2015/11/16/is-84-less-than-3-11-of-respondents-say-yes/) that show the limitations of _post-hoc_ modeling and the pervasiveness of bad actors. As some of the commenters pointed out, if people were responding randomly, then we could treat their responses as noise. However, what they are pointing out is that people in fact do not respond randomly -- there may be some questions that are more likely to elicit "incorrect" responses than others, which puts us in bias detection territory.
-
+<!--summary-->
 SurveyMan comes equipped with a variety of classifiers for deciding whether a response comes from a bad actor. Different classifiers come with different sets of assumptions and different power. In particular, I was focused on developing classifiers that leveraged SurveyMan's randomization and structural features. Since we have a simulator, it might make sense to take a look at classifiers that make modeling assumptions as well.
 
 <!-- What are the differences between classifiers? Some responses are classified the same way, regardless of classifier, but what do the boundary cases look like? How might we systematically bias results -->
