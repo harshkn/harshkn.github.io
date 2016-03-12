@@ -5,6 +5,7 @@ url: "http://cs.umass.edu/~etosch"
 twitter_username: emmatosch
 github_username:  etosch
 excerpt_separator: <!--summary-->
+comments: true
 
 # Build settings
 markdown: kramdown
