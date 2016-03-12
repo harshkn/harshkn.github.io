@@ -2,6 +2,8 @@
 layout: post
 title: Inferring Causal Estimators
 permalink: estimator_inference.html
+comments: true
+type: post
 jsarr:
 - graphs/dag_default.js
 author:
