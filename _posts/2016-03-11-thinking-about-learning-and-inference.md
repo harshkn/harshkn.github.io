@@ -2,6 +2,7 @@
 layout: post
 title: Thinking about Learning and Inference
 comments: true
+type: post
 author:
   display_name: Emma Tosch
 ---
