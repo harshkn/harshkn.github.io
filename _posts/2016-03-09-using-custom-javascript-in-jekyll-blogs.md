@@ -1,5 +1,7 @@
 ---
 layout: post
+type: post
+comments: true
 author:
   display_name: Emma Tosch
 ---

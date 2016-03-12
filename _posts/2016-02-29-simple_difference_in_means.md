@@ -1,5 +1,7 @@
 ---
 layout: post
+type: post
+comments: true
 title: Simple Difference in Means
 author:
   display_name: Emma Tosch

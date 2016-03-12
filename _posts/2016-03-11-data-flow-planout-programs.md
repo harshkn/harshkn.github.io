@@ -1,6 +1,8 @@
 ---
 layout: post
 title: Data Flow in PlanOut Programs
+type: post
+comments: true
 author:
   display_name: Emma Tosch
 ---
