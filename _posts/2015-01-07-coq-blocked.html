@@ -4,6 +4,7 @@ title: Coq Blocked
 date: 2015-01-07 12:28:05.000000000 -05:00
 type: post
 published: true
+comments: true
 status: publish
 categories:
 - Coq
@@ -19,6 +20,7 @@ author:
   last_name: Tosch
 ---
 <p>Some time ago <a href="http://cs.umass.edu/~cibelemf">Cibele</a> and I were working on a fun logic project that involved encoding classical logic in Coq. Perhaps it seems odd that we would write a logic language in language that has a logic already encoded in it, but this is a classic application of PL goodness (i.e., nonsense): we used Gallina as our meta language to encode the primitives of our target language (propositional logic, for starters). You can see the fruits of our efforts <a href="https://github.com/etosch/logic">here</a>.</p>
+<!--summary-->
 <p>Our initial goal was to be able to prove the first homework assignment using just Coq. We needed to define concepts such as suitability, satisfiability, validity, etc. We ran into problems during our first pass because we tried to define everything as a function, which doesn't lend itself to proofs. </p>
 <p>In order to proof even the most simple theorems, we needed to define the concept of suitability. We started by defining atomic formulae and assignments:</p>
 

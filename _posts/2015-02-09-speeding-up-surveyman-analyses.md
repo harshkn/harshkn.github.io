@@ -4,6 +4,7 @@ title: Speeding up SurveyMan analyses
 date: 2015-02-09 13:58:29.000000000 -05:00
 type: post
 published: true
+comments: true
 status: publish
 categories:
 - Research
@@ -19,7 +20,7 @@ author:
 ---
 
 A major bottleneck in some of our analyses is that we need to resample survey responses. Let $$n$$ denote the number of responses we've seen. Let $$m$$ denote the number of questions in the survey. $$b_i$$ is the number of bootstrap iterations. $$b_s$$ is a list of bootstrap samples. $$scores$$ is a list of scores. Our resampling approach is as follows:
-
+<!--summary-->
 
 1. For each response $$ r $$ in the list of all responses ($$O(n)$$):
     1. $$srs \gets$$ All other survey responses that have answered at least all the questions in $$ r $$ ($$ O(n) $$).

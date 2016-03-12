@@ -4,6 +4,7 @@ title: 'Stats Review: Infinite sets'
 date: 2015-01-05 11:53:16.000000000 -05:00
 type: post
 published: true
+comments: true
 status: publish
 categories:
 - stats
@@ -19,7 +20,7 @@ author:
   last_name: Tosch
 ---
 I'm looking over Casella and Berger's [Statistical Inference](http://www.amazon.com/dp/0534243126/?tag=mh0b-20&amp;hvadid=3486843850&amp;ref=pd_sl_88k3cgtfa6_b) and reviewing some of the concepts. For the record, this book is exactly what you want if you need to take a statistics qualifying exam as a graduate student and not at all what a generalist will want. I actually enjoyed the material for the relatively clean overview it gave. There's depth, but not so much as to deter someone without a degree in mathematics. That said, I would not recommend this book for beginners. If you do want to slog through, get a supplementary book.
-
+<!--summary-->
 I'm currently looking at a section on page 4 of the second edition. There is a section that begins:
 
 <blockquote>
