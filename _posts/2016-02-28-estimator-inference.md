@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Inferring Causal Estimators
+title: Inferring Valid Causal Estimators for Experiments
 permalink: estimator_inference.html
 comments: true
 type: post
@@ -9,7 +9,7 @@ jsarr:
 author:
   display_name: Emma Tosch
 ---
-PlanOut programs are just sets of assignments with some conditions imposed on top of them. If we generate the dependencies between parameters in a PlanOut program, we can use this information to determine which contrasts are valid.
+PlanOut programs are just sets of assignments with some conditions imposed on top of them. If we generate the dependencies between variables in a PlanOut program, we can use this information to determine which contrasts are valid.
 <!--summary-->
 All PlanOut programs can be converted into graphs.
 
@@ -26,16 +26,27 @@ We can visualize the dependence between variables here:
 
 <div id="basic_dag"></div>
 
-Yellow nodes indicate that the parameter is defined outside the program and that its value is not known until runtime. Rectangular nodes are  random variables that are the direct result of random operators. Circular nodes are deterministic. Ellipsoid nodes are random variables through the flow of data. 
+{% comment %}
+THIS PICTURES ARE REALLY COOL BUT I FIND THEM A LITTLE BIT CONFUSING BECAUSE
+THEY ARE NOT QUITE CAUSAL DAGS. FOR EXAMPLE, CONSIDER THE RELATIONSHIP,
+ specific_goal <- USERID -> group_size. If this were a causal dag / bayes net,
+there would be some association between these two variables. However, there
+is none, because the values of these variables are determined in a way that is
+completely independent of the individuals' potential outcomes.  That, and there
+aren't really any outcomes :)
+{% endcomment %}
 
-`userid` is the only parameter that's external to the program. To reason about its role, we must observe it. All parameters defined in the consequent depend on the parameters in the guard. This is why there is an edge from `specific_goal` to `ratings_per_user_goal`.
+Yellow nodes indicate that the variable is defined outside the program and that its value is not known until runtime. Rectangular nodes are  random variables that are the direct result of random operators. Circular nodes are deterministic. Ellipsoid nodes are random variables through the flow of data.
 
-When devising causal estimators, we want to know:
+`userid` is the only variable that's external to the program. To reason about its role, we must observe it. All variables defined in the consequent depend on the variables in the guard. This is why there is an edge from `specific_goal` to `ratings_per_user_goal`.
 
-1. Under what conditions is a variable a random variable?
-2. What are the valid contrasts for the DAG?
+When devising possible estimators for PlanOut programs, we want to know:
 
-Given that `userid` has sufficiently high cardinality, we have complete information about the joint probability distribution of `group_size`, `ratings_per_user`, and `rating_per_user_goal`, conditioned on the distribution of the `userid`. We want to look at changes to the script that could change constrain our understanding of the distribution of variables.
+1. Under what conditions is a variable in a PlanOut program (conditionally)
+uncorrelated with the users' potential outcomes?
+2. What are the valid causal contrasts for the DAG?
+
+Given that `userid` has sufficiently high cardinality, we have complete information about the joint probability distribution of `group_size`, `ratings_per_user`, and `rating_per_user_goal`. We want to look at changes to the script that could change constrain our understanding of the distribution of variables.
 
 Note that question (1) is not completely trivial: this example illustrates that it is not so simple as detecting assignment from random operators. Since sums and products of random variables are also random variables, and since control flow can define random variables, determining whether a node is an ellipsoid in this graph is non trivial.
 
@@ -60,14 +71,14 @@ It is also completely valid to rewrite the above as:
       ratings_per_user_goal = uniformChoice(choices=[8, 16, 32, 64], unit=userid);
       ratings_goal = group_size * ratings_per_user_goal;
     }
-   
+
 The resulting dag is now:
 
 <div id="rewrite"></div>
 
-Since assignment in the consequent and subsequent of an if-statement depends on the guard, we can use the same conditions as for arithmetic operators to infer that `group_size` is a random variable. 
+Since assignment in the consequent and subsequent of an if-statement depends on the guard, we can use the same conditions as for arithmetic operators to infer that `group_size` is a random variable.
 
-In all of these cases, we have the full joint probability distribution available, enabling us to compare any subset of the factors. All assignments use the same unit of randomization (`userid`), so a simple difference of means for any conditions is valid. 
+In all of these cases, we have the full joint probability distribution available, enabling us to compare any subset of the factors. All assignments use the same unit of randomization (`userid`), so a simple difference of means for any conditions is valid.
 
 ## Conditioning on the Unknown
 
@@ -75,18 +86,18 @@ Suppose instead that we had the program
 
     group_size = uniformChoice(choices=[1, 10], unit=userid);
     specific_goal = bernoulliTrial(p=0.8, unit=userid);
-    if (specific_goal && gkCheck(gk="people_i_care_about", userid=userid)) {
+    if (specific_goal && inPopulation(pop="people_i_care_about", userid=userid)) {
       ratings_per_user_goal = uniformChoice(choices=[8, 16, 32, 64], unit=userid);
       ratings_goal = group_size * ratings_per_user_goal;
     }
 
-Notice that the guard is different: it is now a conjunction and includes the function call `gkCheck(gk="people_i_care_about", userid=userid)`.
+Notice that the guard is different: it is now a conjunction and includes the function call `inPopulation(pop="people_i_care_about", userid=userid)`.
 
 The analyzer rewrites function calls that sit in the guard as assignments that precede the guard, so we can just reason about variable references. This code would then be rewritten as
 
     group_size = uniformChoice(choices=[1, 10], unit=userid);
     specific_goal = bernoulliTrial(p=0.8, unit=userid);
-	uu1 = gkCheck(gk="people_i_care_about", userid=userid);
+	uu1 = inPopulation(pop="people_i_care_about", userid=userid);
     if (specific_goal && uu1) {
       ratings_per_user_goal = uniformChoice(choices=[8, 16, 32, 64], unit=userid);
       ratings_goal = group_size * ratings_per_user_goal;
@@ -96,4 +107,5 @@ Now that we have moved the function call into a variable, we can treat it as a r
 
 <div id="with_gk"></div>
 
-Clearly here anything downstream from `uu1` must be conditioned on it being true. Only `specific_goal` does not need to be conditioned on `uu1`. 
+Clearly here anything downstream from `uu1` must be conditioned on it being true. Only `specific_goal` does not need to be conditioned on `uu1`.
+<!-- I am not sure what the above statement means --->

@@ -7,7 +7,11 @@ author:
   display_name: Emma Tosch
 ---
 
-On the one hand, PlanOut is straightforward and should be easy to reason about: the language does not permit user-defined functions and none of the operators use loops or recursion. When we analyze PlanOut programs, we are interested in two main analyses: the calculation of *propensity scores*, or the probability of exposure, and the *experimental contrasts*, or the values that may be compared.
+On the one hand, PlanOut is straightforward and should be easy to reason about: the language does not permit user-defined functions and none of the operators use loops or recursion. Experiments are designed to provide apples-to-apples comparisons between
+two or more equivalent treatment groups, yet PlanOut programs are able to assign individuals to treatment groups using any number of users characteristics or
+complex logic.  To analyze such experiments, one therefore needs to be able to
+determine what kinds of contrasts between the variables which define a treatment
+(the experimental contrasts), and the propensity to receive a treatment (the propensity scores).
 
 What makes reasoning about PlanOut scripts tricky is that free variables may sit around unevaluated: we may have some expression such that there is no way to simplify it down to a base value without further information from the system. This post describes how the analyzer interprets expressions in the presence of unknown values.
 
@@ -63,7 +67,7 @@ $$\frac{\langle e_1, \Delta \rangle \Downarrow_b x_1 \quad \langle e_2, \Delta \
 
 # Arithmetic Expressions
 
-Arithmetic expressions operate similarly, but the analogue of disjunction is summation (subtraction) and the analogue of conjunction is multiplication (division). 
+Arithmetic expressions operate similarly, but the analogue of disjunction is summation (subtraction) and the analogue of conjunction is multiplication (division).
 
 {% raw %}
 $$\frac{}{\langle n, \Delta \rangle \Downarrow_a n}$$
@@ -79,6 +83,4 @@ We flatten the parse tree by distributing the operations so that $$(a + b)(x + y
 $$\frac{\langle x_1, \Delta \rangle \Downarrow_a n_1 \quad \langle y_1, \Delta \rangle \Downarrow_a n_2 \quad n_3 = n_1n_2 \quad \langle x_2, \Delta \rangle \Downarrow_a +x_2 \quad \langle y_2, \Delta \rangle \Downarrow_a +y_2}{\langle (x_1 + x_2)(y_1 + y_2), \Delta \rangle \Downarrow_a n_3 + n_1(+x_2) + n_2(+y_2) + (+x_2)(+y_2)}$$
 {% endraw %}
 
-The commutativity of addition allows us to rearrange the expression and evaluate down the expression down to two components -- the first part is a number, and the second is a set of terms (summands) that are a series of products, each of which have at least one external term. 
-
-
+The commutativity of addition allows us to rearrange the expression and evaluate down the expression down to two components -- the first part is a number, and the second is a set of terms (summands) that are a series of products, each of which have at least one external term.
