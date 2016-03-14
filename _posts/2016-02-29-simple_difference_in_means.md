@@ -7,18 +7,27 @@ author:
   display_name: Emma Tosch
 ---
 
-When inferring contrasts, we make the simplifying assumption that the unit of randomization is proxy for the experimental subject. We also assume that units are independent of each other and that the parameter of interest can be uniquely determined by the parameters in the program, conditioned on the experimental unit of randomization.
+When inferring contrasts for a simple difference in means estimator for a (between subjects) PlanOut experiment, we take the unit of randomization to uniquely
+identify a subject. We also assume that the assignment of one unit [does not affect
+the outcomes](https://en.wikipedia.org/wiki/Rubin_causal_model#Stable_unit_treatment_value_assumption_.28SUTVA.29) of other units.  And finally, we assume that the parameter of interest can be determined by the variables in the PlanOut program, since these variables are subsequently read by an Internet application to determine the user experience.
 
-Without more specific domain knowledge, we must treat each PlanOut script as a procedure parameterized by the unit of randomization (i.e., all of the $$r$$ values assigned to the special property $$unit$$ in the random operators) and the parameter of interest (i.e., the dependent variable in the analysis we will do at the end).
+Without more specific domain knowledge, we must treat each PlanOut script as a procedure parameterized by the unit of randomization (e.g., the userid) and the parameter of interest (i.e., the dependent variable in the analysis we will do at the end).
+<!-- ^^ We overload the term "parameter" way too much, to refer to variables in
+a program, parameterizing software, and as a parameter in a statistical model.
+This sentence uses both senses, which is confusing.
+-->
+
 <!--summary-->
 
 # A small amount of background
 
-Suppose, for example, we were interested in measuring engagement in terms of seconds spent on a page. We want to compare engagement when the background color of a website is blue versus engagement when the background color of a website is red. Our analysis will be of the form $$Y(background\_color=blue) - Y(background\_color=red)$$, where $$Y$$ in this case is the number of seconds spent on the page. The difference gives us the effect size and direction changing the background color. The causality literature refers to the two values that $$background\_color$$ may take on as *potential outcomes*. If the default backround is $$blue$$ and we are testing out background $$red$$, then we might refer to to $$background\_color=blue$$ as the control and $$backgroud\_color=red$$ as the treatment[^1] and use the shorthand $$Y(0) - Y(1)$$.
+Suppose, for example, we were interested in measuring engagement in terms of seconds spent on a page. We want to compare engagement when the background color of a website is blue versus engagement when the background color of a website is red. Our analysis will be of the form $$Y(background\_color=blue) - Y(background\_color=red)$$, where $$Y$$ in this case is the number of seconds spent on the page. The difference gives us the effect size and direction changing the background color. The causal inference literature refers
+to the outcomes of subjects who receive either of the two values that $$background\_color$$ as the subject's  *potential outcomes*. If the default background is $$blue$$ and we are testing out background $$red$$, then we might refer to to $$background\_color=blue$$ as the control and $$backgroud\_color=red$$ as the treatment[^1] and use the shorthand $$Y_i(1) - Y_i(0)$$ to refer to the difference
+in the outcomes for each individual.
 
-In a perfect world, we would have [mastered the ability](http://www.imdb.com/title/tt1119644/) [to cross between parallel universes](http://www.imdb.com/title/tt0112167/). This would allow us to know the result of both outcomes and to measure the effect exactly for every individual. However, since we have not yet developed the ability to conduct experiments in parallel universes, we will have to settle with some mathematical reasoning instead.
+In a perfect world, we would have [mastered the ability](http://www.imdb.com/title/tt1119644/) [to cross between parallel universes](http://www.imdb.com/title/tt0112167/). This would allow us to know the result of both outcomes for every $$i$$ and to measure the effect exactly for every individual. However, since we have not yet developed the ability to conduct experiments in parallel universes, we will have to settle with some mathematical reasoning instead.
 
-[Rubin's potential outcomes](https://en.wikipedia.org/wiki/Rubin_causal_model) allow us to think about effects in aggregate and reason backwards to the individual. The simplest path from aggregate data to individual inference is the *average treatment effect*, or $$ATE$$. The $$ATE$$ measures the average $$Y(0)-Y(1)$$ across the whole population. If we run a single experiment, we get a single estimate of the $$ATE$$, which we denote $$\widehat{ATE}$$. We also get a single estimate of the variance around the $$\widehat{ATE}$$, which allows us to estimate how far off a single individual might be from the average effect. If we were to run many experiments and measure many $$\widehat{ATE}$$s, we would converge on the true $$ATE$$ and its true variance. Then for any individual we could bound the effect of the treatment[^2].
+[Rubin's potential outcomes](https://en.wikipedia.org/wiki/Rubin_causal_model) allow us to think about effects in aggregate and reason backwards to the individual. The simplest path from aggregate data to individual inference is the *average treatment effect*, or $$ATE$$. The $$ATE$$ measures the average $$Y_i(1)-Y_i(0)$$ across the whole population. If we run a single experiment, we get a single estimate of the $$ATE$$, which we denote $$\widehat{ATE}$$. We also get a single estimate of the variance around the $$\widehat{ATE}$$, which allows us assess our uncertainty about the location of the true average effect. If we were to run many experiments and measure many $$\widehat{ATE}$$s, we would converge on the true $$ATE$$ and its true variance. Then for any individual we could bound the effect of the treatment[^2].
 
 # Assumptions that permit estimation of ATE
 
@@ -27,6 +36,7 @@ There are other avenues to estimating the treatment effect for an individual exp
 Before we are able to programmatically generate the set of comparisons, we must first ensure that we are even *allowed* to compare different factors.
 
 **An example**
+<!-- eytan's edits/comments stop here -->
 
 Here is the PlanOut version of the example above:
 
@@ -35,7 +45,10 @@ Here is the PlanOut version of the example above:
       weights=[0.9, 0.1],
       unit=userid);
 
-We might run the analysis by querying a log database. The system would need to automatically log the number of seconds spent on the page; support for this kind of feature is not available in PlanOut directly.
+We might run an analysis of this experiment by querying a log database which
+includes data about which users were [exposed to the treatment](https://facebook.github.io/planout/docs/logging.html) (the background colors),
+as well as those users' outcomes (e.g., the number of seconds spent on the page).
+Such queries and analyses are not available in PlanOut directly.
 
 Now what would happen if we instead randomized the background on the basis of the browser version id (assuming that the cardinality of `versionid` is sufficiently high):
 
@@ -46,7 +59,7 @@ Now what would happen if we instead randomized the background on the basis of th
 
 If we are still measuring engagement in terms of seconds, we can no longer use the simple difference in means -- the same user may have multiple browsers and/or multiple machines. This means that we may get multiple readings from the same user in one or both of the treatment and the control. If users were unaffected by background color, or had very short-term memories, it is possible that the multiple readings wouldn't matter. Since this is unlikely to be the case, we cannot use $$ATE$$ for engagement here.
 
-On the other hand, what if our $$Y$$ were something indepenent of users? For example, we might be interested in the effect of our treatment on browser load time. Of course, we care about browser load time because it influences engagement, but if change our question (and thus our analysis) to be about the effect of treatment on a feature of the browser, then we can use $$ATE$$ again.
+On the other hand, what if our $$Y$$ were something independent of users? For example, we might be interested in the effect of our treatment on browser load time. Of course, we care about browser load time because it influences engagement, but if change our question (and thus our analysis) to be about the effect of treatment on a feature of the browser, then we can use $$ATE$$ again.
 
 Now suppose we instead set our unit of randomization to `(userid, versionid)`. It is not clear here that there exists a parameter of interest proxied by this tuple.
 
@@ -60,7 +73,7 @@ Since we do not know what the parameter of interest is, we can only reason about
 We start with the simplifying assumption that there are no return statements. We can reaon about return statements later by copying the program graph and removing unreachable edges. Nodes with no edges will be pruned from the graph.
 
 
-    function IsConstant(Program graph G, node) 
+    function IsConstant(Program graph G, node)
         For a given node, traverses the program to see if the value is constant, iff:
         1. The variable is set only once.
         2. The value the variable is set to is not random, nor external.
@@ -70,23 +83,23 @@ We start with the simplifying assumption that there are no return statements. We
         then
             1. S' <- S + node
             2. return S'
-        else 
+        else
             1. for n' in Parents(n)
                   if n' in S
                   then
                       1. S' <- S + node
-                      2. return S' 
-                  else 
+                      2. return S'
+                  else
                       1. S' <- InferRand(F, S, node, n')
                       if S' <> S
-                      then 
+                      then
                           1. return S'
             2. return S
 
     function GetContrasts(Program graph G, Set of random nodes S)
 	    1. C <- List of contrast tables, initialized empty
         2. for each node in a topological sort of nodes in G
-           if not IsConstant(G, param) and not External(G, param) 
+           if not IsConstant(G, param) and not External(G, param)
            then
                1. LHS <- {}
                2. RHS <- {}
@@ -98,7 +111,7 @@ We start with the simplifying assumption that there are no return statements. We
                       then
                           1. c <- parent's contrast from C
                           2. RHS <- RHS + c.rhs
-                  else 
+                  else
                       1. RHS <- RHS + parent
               4. C <- {rhs: RHS, rhs: LHS}::C
         3. return C
