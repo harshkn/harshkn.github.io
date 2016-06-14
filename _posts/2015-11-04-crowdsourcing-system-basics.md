@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Crowdsourcing system basics
+permalink: crowdsourcing_basics.html
 date: 2015-11-04 11:39:59.000000000 -05:00
 type: post
 published: true

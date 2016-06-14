@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Data Flow in PlanOut Programs
+permalink: data_flow_planout_programs.html
 type: post
 comments: true
 author:

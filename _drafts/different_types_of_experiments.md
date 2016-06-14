@@ -21,9 +21,32 @@ controlled experiments == randomized experiments
 
 # Parallel flights
 
+# D-optimal designs
+
+# Latin Squares
+
+# Latin Hypercube
+
+# Fractional Factorial Designs
+
+# Orthogonal arrays
+
+# Box-Behnken designs
+
+# Central composite design
+
+# Lattice Design
+
+# Alpha Design
+
 
 ## Other terminology
 
 # Overall Evaluation Criterion (OEC)
 
 # Scorecard approach in the face of multiple metrics
+
+# Card Sorting
+
+
+* What is the connection between ATE and ANOVA and regression?

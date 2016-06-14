@@ -2,6 +2,7 @@
 layout: post
 type: post
 comments: true
+permalink: config_file_input_schema.html
 author:
   display_name: Emma Tosch
 ---
