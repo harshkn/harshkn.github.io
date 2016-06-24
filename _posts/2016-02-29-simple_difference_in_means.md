@@ -3,6 +3,7 @@ layout: post
 type: post
 comments: true
 title: Simple Difference in Means
+permalink: simple_difference_in_means.html
 author:
   display_name: Emma Tosch
 ---

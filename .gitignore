@@ -5,3 +5,5 @@ Gemfile.lock
 *~
 _posts/.*#.*
 *~
+.DS_Store
+.texpadtmp
