@@ -3,67 +3,109 @@
 \usepackage{parskip}
 \usepackage{hyperref}
 \usepackage{enumitem}
+\usepackage{subcaption}
+\usepackage{graphicx}
+\usepackage{multirow}
 \pagestyle{empty}
+\usepackage{longtable}
+
 \setlength\parindent{0pt}
 \def \boxwidth {6in}
+
+\setlength{\LTpre}{0pt}
+\setlength{\LTpost}{0pt}
+
 \newcommand{\cvsec}[2]{
-	\begin{tabular}[t]{ p{1in} p{6in} }
-		\sc{#1} & 
-		    \begin{tabular}[t]{@{}p{\boxwidth}@{}}
+	\begin{figure*}
+		\begin{subfigure}[t]{1in}
+			\sc{#1} 
+		\end{subfigure}
+		\begin{subfigure}[t]{6in}
+		\vspace{-13px}
+		    \begin{longtable}[t]{p{\boxwidth}}
                 #2
-            \end{tabular}
-	\end{tabular}
-	\vspace{0.15in}
+            \end{longtable}
+		\end{subfigure}
+	\end{figure*}
 }
 \begin{document}
 
-{\Large \noindent Emma Tosch}\\
-\rule{\linewidth}{0.3mm}\\
+\renewcommand{\arraystretch}{1.2}
 
-\cvsec{Contact \newline Information}{
-	\begin{tabular}[t]{@{}p{3.75in}r@{}}
-		231 Elm Street 2R & 140 Governors Drive\\
-		Northampton, MA 01060 & Amherst, MA 01002\\
-		\url{etosch@fastmail.fm} & \url{etosch@cs.umass.edu}\\
-	 	& \url{http://github.com/etosch}\\
-	 	& \url{http://blogs.umass.edu/etosch}\\
-                &   PhD Advisor: Emery Berger
-	\end{tabular}
-}
+\begin{figure*}
+\begin{subfigure}{0.65\textwidth}
+{\Large \noindent Emma Tosch}		\\
+%\includegraphics[scale=0.1]{plasma-globe}
+PhD Candidate\\
+University of Massachusetts Amherst\\
+College of Information and Computer Sciences\\
+Programming Languages and Systems Lab (PLASMA) \\
+Advisor: Dr. Emery Berger
+\end{subfigure}
+\begin{subfigure}{0.35\textwidth}
+\begin{tabular}{p{2in} l}
+{140 Governors Drive \newline
+Amherst, MA 01002 \newline
+PLASMA Lab, CS 354} & \includegraphics[scale=0.5]{glyphicons_free/glyphicons/png/glyphicons-21-home}\\
+\url{etosch@cs.umass.edu} & \includegraphics[scale=0.5]{glyphicons_free/glyphicons/png/glyphicons-11-envelope}\\
+\url{http://github.com/etosch} & \includegraphics[scale=0.4]{GitHub-Mark/PNG/GitHub-Mark-32px}\vspace{2pt}\\
+\url{http://etosch.github.io} & \includegraphics[scale=0.5]{glyphicons_free/glyphicons/png/glyphicons-236-pen}
+\end{tabular}
+\end{subfigure}
+\rule{\linewidth}{0.3mm}\\
+\end{figure*}
+
+\renewcommand{\arraystretch}{1.5}
 	 
-\cvsec{Education}{
-        Ph.D. {\bf Computer Science}. University of Massachusetts, Amherst. Amherst, MA. 2011 -- present.  \\
+\cvsec{Education}{Ph.D. {\bf Computer Science}. University of Massachusetts, Amherst. Amherst, MA. 2011 -- present.  \\
         M.S. {\bf Computer Science}. University of Massachusetts Amherst. Amherst, MA. 2011 -- 2015.\\
         M.A. {\bf Computer Science}. Brandeis University. Waltham, MA. 2009 -- 2011. \\
 	B.A. {\bf English Literature}. Wellesley College. Wellesley, MA. 2006 -- 2008.
 }
 
 \cvsec{Research \newline Experience}{
-{\bf Research Intern}. June 2015 -- August 2015. Facebook, Inc. Menlo Park, CA. Core Data Science -- Economic Research Team, Mentor: Eytan Bakshy. Static Analysis for the PlanOut DSL. \\\\
-		{\bf Research Assistant}. June 2013 -- present. University of Massachusetts, Amherst. PLASMA Lab, Advisor : Emery Berger. Developing a domain specific programming language and runtime system
-to design, debug, and deploy scientific surveys on the web, at scale.\\\\
+		{\bf Research Assistant}. June 2013 -- present. University of Massachusetts, Amherst. PLASMA Lab, Advisor : Emery Berger. Developed a domain specific programming language and runtime system
+to design, debug, and deploy scientific surveys on the web, at scale. Developing static analyses for experimental designs.\\
+
+{\bf Research Intern}. June 2015 -- August 2015. Facebook, Inc. Menlo Park, CA. Core Data Science -- Economic Research Team, Statistics and Decision Science Team. Mentor: Eytan Bakshy. Static Analysis for the PlanOut DSL. \\
+
 		{\bf Research Assistant}. September 2011 -- January 2013. University of Massachusetts, Amherst. CI Lab, Advisor : Lee Spector. Researched new metrics for evaluating parameters of evolutionary
-search based on techniques from nonparametric statistics.\\\\
+search based on techniques from nonparametric statistics.\\
+
 		{\bf Visiting Researcher}. June 2010 -- August 2010. Institute for Creative Technologies. Playa Vista, CA. Supervisor : Ron Artstein. Augmented and evaluated a natural language generation and
 question-answering system for virtual humans.
 }
 
 \cvsec{Publications}{
-        E. Tosch, E. Berger. SurveyMan: Programming and Debugging Surveys at Scale. \emph{Proceedings of the 2014 ACM International Conference on Object Oriented Programming Systems Languages and Applications}. ACM New York, NY, USA. 2014. {\bf Best Paper Award.}\\\\
-        E. Tosch, E. Berger. Programming and Debugging Surveys. POPL OBT 2014.\\\\
-		E. Tosch, L. Spector. Achieving COSMOS: A metric for determining when to give up and when to reach for the stars. \emph{Proceedings of the 14th Intl. Conf. on Genetic and Evolutionary Computation Conference Companion}. ACM New York, NY, USA. 2012.\\\\
-	K. Harrington, E. Tosch, L. Spector, J. Pollack. Compositional Autoconstructive Dynamics \emph{Proc. of the 8th Intl. Conf. on Complex Systems}. 2011.\\\\
-	G. Chen, E. Tosch, R. Artstein, A. Leuski, D. Traum. Evaluating Conversational Characters Created through Question Generation. FLAIRS Conference. 2011.
+		D. Barowy, {\bf E. Tosch}, B. Zorn, E. Berger. Structural and Spatial Debugging for Spreadsheets. \emph{In Submission}.\\
+		
+		E. Bakshy, {\bf E. Tosch}. Formal Verification and Automated Causal Inference for Internet-Scale Experiments. CODE@MIT 2015.\\
+		
+        {\bf E. Tosch}, E. Berger. SurveyMan: Programming and Debugging Surveys at Scale. \emph{Proceedings of the 2014 ACM International Conference on Object Oriented Programming Systems Languages and Applications}. ACM New York, NY, USA. 2014. {\bf Best Paper Award.}\\
+        
+        {\bf E. Tosch}, E. Berger. Programming and Debugging Surveys. POPL OBT Workshop 2014.\\
+      
+		{\bf E. Tosch}, L. Spector. Achieving COSMOS: A metric for determining when to give up and when to reach for the stars. \emph{Proceedings of the 14th Intl. Conf. on Genetic and Evolutionary Computation Conference Companion}. ACM New York, NY, USA. 2012.\\
+	K. Harrington, {\bf E. Tosch}, L. Spector, J. Pollack. Compositional Autoconstructive Dynamics \emph{Proc. of the 8th Intl. Conf. on Complex Systems}. 2011.\\
+	
+	G. Chen, {\bf E. Tosch}, R. Artstein, A. Leuski, D. Traum. Evaluating Conversational Characters Created through Question Generation. FLAIRS Conference. 2011.
 }
 
 \cvsec{Teaching \newline Experience}{
+{\bf Mentor}. REUMass '16. Mentoring an undergraduate (Rosario Huamani Carpio, Pomona College '18). Summer 2016. \\
 {\bf Mentor}. Google Summer of Code. Official mentor for a GSoC student (Prakhar Srivastav) working on a SurveyMan graphical interface. Summer 2015.\\
-        {\bf Mentor}. UMass Amherst. Mentoring an undergraduate (Molly McMahon) for an independent study with Emery Berger. Spring 2014.\\
+        {\bf Mentor}. UMass Amherst. Mentoring an undergraduate (Molly McMahon) for a summer REU and an independent study with Emery Berger. Summer 2013, Spring 2014.\\
 		{\bf  Teaching Assistant}. Reasoning Under Uncertainty (Undergraduate), University of Massachusetts, Amherst. Prof. Andrew McGregor. Spring 2013.\\
 		{\bf Teaching Assistant, Guest Lecturer}. Intro. to Theory of Computation (Undergraduate), Brandeis University. Antonella DiLillo. Spring 2011.\\
 		{\bf Teaching Assistant}. Structure and Interpretation of Computer Programs (Undergraduate), Brandeis University. Prof. Harry Mairson. Fall 2010.\\
 		{\bf Teaching Assistant}. Data Structures (Undergraduate), Brandeis University. Antonella DiLillo. Spring 2010.\\
 		{\bf Volunteer}. Cahners Computer Place, Museum of Science, Boston. Oct. 2009 -- May 2010, Sep. 2010 -- May 2011
+}
+
+\renewcommand{\arraystretch}{1}
+
+\cvsec{Teaching Training}{28 September 2015.  Active Learning Training with Rachel Rybaczuk.\\
+Fall 2015.  CIRTL Course.  Diversity in College Classroom:  Teaching the STEM Undergraduate.
 }
 
 \cvsec{%Relevant \newline
@@ -76,10 +118,21 @@ question-answering system for virtual humans.
 %  {\bf Laborer}. January 2006 -- May 2006. Natick Community Organic Farm. Natick, MA.\\ % comment this out later
   {\bf Intern}. June 2004 -- August 2004. New Jersey Division of Law and Public Service. Trenton, NJ.\\
 %  {\bf Clerk}. June 2002 -- April 2003. Wawa (Convenience Store). Hamilton, NJ.\\ % comment this out later
-
-
+}
 
 \cvsec{Talks and \newline Presentations}{
+	\emph{Programming Language Research and Social Science}.\\
+	\begin{tabular}{l}
+		30 June 2016. REUMass Summer `16 Lunch Series. Amherst, MA.
+	\end{tabular}
+	\newline\\
+	\emph{Programming Languages and Experimentation}.\\
+	\begin{tabular}{l}
+		31 May 2016. NEPLS Spring 2016. Amherst, MA.\\
+		17 October 2015. CODE@MIT. Poster Presentation. Cambridge, MA.
+	\end{tabular}
+\newline\\
+	
     \emph{Programming and Debugging Surveys}.\\
     \begin{tabular}{l}
     13 May 2015. Google, Inc. Invited Talk. Cambridge, MA.\\
@@ -90,13 +143,15 @@ question-answering system for virtual humans.
     12 March 2014. UMass CS Women. Oral presentation. Amherst, MA.\\
     31 January 2014. Google PhD Summit. Lightning talk. Cambridge, MA.\\
     25 January 2014. POPL OBT Workshop. Oral presentation (full). San Diego, CA.\\
-    \end{tabular}\\\\    
-    
+    \end{tabular}    
+    \newline\\
+	
     \emph{Achieving COSMOS}.\\
     \begin{tabular}{l}
     7 July 2012. GECCO UP Workshop. Oral presentation (full). Philadelphia, PA.
-    \end{tabular}\\\\
-    
+    \end{tabular}
+    \newline\\
+	
     \emph{Women in Computing}.\\
     \begin{tabular}{l}
     	24 April 2015. MassMutual Women in Technology Conference. \emph{Inspiring Women in Technology} Panelist.
@@ -104,14 +159,23 @@ question-answering system for virtual humans.
 }
 
 
-\cvsec{Professional \newline Activities}{
-		CICS Graduate Representative. January 2016 -- present.
-		UMass CS Women. Treasurer. January 2016 -- present, Co-Chair. January 2015 -- January 2016.\\
+\cvsec{Professional \newline Activities \newline \& Service}{
+		CICS Graduate Representative. January 2016 -- present.\\
+		Student Volunteer, PLDI 2016. June 2016. \\
+		UMass CS Women. Webmaster. June 2016 -- present.\\
+		UMass CS Women. Treasurer. January 2016 -- May 2016.\\
+		UMass CS Women. Co-Chair. January 2015 -- January 2016.\\
+		PLDI External Review Committee.  Member.  2016.\\
+		ECOOP External Review Committee.  Member.  2016.\\
+		POPL OBT Workshop Program Committee.  Member.  2016.\\
+		WPI STEM Faculty Launch.  Participant.  September 2015.\\
+		ACM-W Early Career Mentoring Workshop.  Participant.  June 2015.\\
 		Program Comittee Member. ECOOP DSLDI Workshop 2016. \\
 		Artifact Evaluation Reviewer. PLDI 2016. \\
+		Computer Science Graduate Admissions Committee. Reviewer. December 2014 -- February 2015.\\
 		NCWIT Aspirations Scholarship Reviewer. November 2014. \\
-                Artifact Evaluation Committee. Reviewer. POPL 2015.\\
-                Student Volunteer, SPLASH 2014. October 2014.\\
+        Artifact Evaluation Committee. Reviewer. POPL 2015.\\
+        Student Volunteer, SPLASH 2014. October 2014.\\
 		Graduate Employee Organization, UAW 2322. Steward. September 2011 -- May 2014.\\
 		NSF REU Graduate Student Mentor. Summer 2013.\\
 		Oregon Programming Languages Summer School. Attendee. July -- August 2013.	\\
@@ -120,6 +184,7 @@ question-answering system for virtual humans.
 
 
 \cvsec{Honors, \newline Scholarships, \newline and Awards}{
+2015 WPI STEM Faculty Launch participant and travel grant.\\
 2015 NCWIT Symantec Student Seed Funding (for UMass CS Women)\\
 2015 UMass Amherst School of Computer Science Outstanding Synthesis Award\\
 2014 OOPSLA Best Paper Award\\
