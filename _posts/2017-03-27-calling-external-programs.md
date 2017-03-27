@@ -17,7 +17,7 @@ So we can see that one of the main challenges is that the node program expects a
 
 `val exec_program : (prog : string) -> string`
 
-<!--break-->
+<!--summary-->
 
 At a high level, the steps necessary to implement this function are:
 
@@ -28,7 +28,7 @@ At a high level, the steps necessary to implement this function are:
 Now, Jane Street's Core library has a module that handles creating temp files. You can find it in [`Core.Filename`](https://ocaml.janestreet.com/ocaml-core/109.07.00/doc/core/Filename.html). This part is fairly straightforward:
 
     let exec_program (prog : string) : string =
-    	let (fname, out) = Core.Core_filename.open_temp_file "some_prefix" "some_suffix" in
+        let (fname, out) = Core.Core_filename.open_temp_file "some_prefix" "some_suffix" in
         Core.Out_channel.output_string out file_content;
         ""
 
