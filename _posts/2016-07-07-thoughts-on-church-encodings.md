@@ -2,6 +2,7 @@
 layout: post
 title: Thoughts on Church Encodings
 type: post
+comments: true
 author:
   display_name: Emma Tosch
 --- 
