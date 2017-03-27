@@ -17,6 +17,8 @@ So we can see that one of the main challenges is that the node program expects a
 
 `val exec_program : (prog : string) -> string`
 
+<!--break-->
+
 At a high level, the steps necessary to implement this function are:
 
 1. Create a temp file holding `prog`.
@@ -27,8 +29,8 @@ Now, Jane Street's Core library has a module that handles creating temp files. Y
 
     let exec_program (prog : string) : string =
     	let (fname, out) = Core.Core_filename.open_temp_file "some_prefix" "some_suffix" in
-	Core.Out_channel.output_string out file_content;
-	""
+        Core.Out_channel.output_string out file_content;
+        ""
 
 The next part is unnervingly tricky, which is why I am writing this post. The obvious next line of code for the above functions might be:
 
@@ -38,11 +40,11 @@ The next part is unnervingly tricky, which is why I am writing this post. The ob
 The challenge is that I've been looking for the appropriate function (represented here by `read_until_done`) to take `stdout` as input and read all of the content printed to it. The main problem I faced (as I saw it) was that `stdout` had type `out_channel`; since I needed to be able to read from it, it needed to have type `in_channel`. So instead of calling `create_process`, I called `open_process_in`, which would produce the input channel I needed for reading (I also make sure I flushed the write to the temp file, just in case!):
 
     let exec_program (prog : string) : string =
-    	let (fname, out) = Core.Core_filename.open_temp_file "some_prefix" "some_suffix" in
-	Core.Out_channel.output_string out file_content;
-	Core.Out_channel.flush out;
-	let stdout = Core.Core_unix.open_process_in ("node $PROGRAM " ^ fname) in
-	Core.In_channel.input_all stdout
+        let (fname, out) = Core.Core_filename.open_temp_file "some_prefix" "some_suffix" in
+        Core.Out_channel.output_string out file_content;
+        Core.Out_channel.flush out;
+        let stdout = Core.Core_unix.open_process_in ("node $PROGRAM " ^ fname) in
+        Core.In_channel.input_all stdout
 
 
 After writing this, I did come across a [StackOverflow question](http://stackoverflow.com/questions/29503960/in-ocaml-how-to-get-stdout-string-from-subprocess) addressing the problem of reading the output of a another process. 
