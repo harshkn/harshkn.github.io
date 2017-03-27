@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Calling External Programs from OCaml with Core
+comments: true
 author:
   display_name: Emma Tosch
 ---
