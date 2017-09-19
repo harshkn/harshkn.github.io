@@ -8,6 +8,7 @@
 \usepackage{multirow}
 \pagestyle{empty}
 \usepackage{longtable}
+\usepackage[skins,breakable]{tcolorbox}
 
 \setlength\parindent{0pt}
 \def \boxwidth {6in}
@@ -16,17 +17,10 @@
 \setlength{\LTpost}{0pt}
 
 \newcommand{\cvsec}[2]{
-	\begin{figure*}
-		\begin{subfigure}[t]{1in}
-			\sc{#1} 
-		\end{subfigure}
-		\begin{subfigure}[t]{6in}
-		\vspace{-13px}
-		    \begin{longtable}[t]{p{\boxwidth}}
-                #2
-            \end{longtable}
-		\end{subfigure}
-	\end{figure*}
+    \begin{tcolorbox}[width=\textwidth, breakable, title={#1}]
+        #2
+    \end{tcolorbox}
+    \vspace{10pt}
 }
 \begin{document}
 
@@ -56,50 +50,48 @@ Amherst, MA 01002} & \includegraphics[scale=0.5]{glyphicons_free/glyphicons/png/
 \end{figure*}
 
 \renewcommand{\arraystretch}{1.5}
-	 
 \cvsec{Education}{Ph.D. {\bf Computer Science}. University of Massachusetts, Amherst. Amherst, MA. 2011 -- present.  \\
         M.S. {\bf Computer Science}. University of Massachusetts Amherst. Amherst, MA. 2011 -- 2015.\\
         M.A. {\bf Computer Science}. Brandeis University. Waltham, MA. 2009 -- 2011. \\
 	B.A. {\bf English Literature}. Wellesley College. Wellesley, MA. 2006 -- 2008.
 }
 
-\cvsec{Research \newline Experience}{
-		{\bf Research Assistant}. June 2013 -- January 2017. University of Massachusetts, Amherst. PLASMA Lab, Advisor : Emery Berger. Developed a domain specific programming language and runtime system
-to design, debug, and deploy scientific surveys on the web, at scale.\\
-
-{\bf Research Intern}. June 2015 -- August 2015. Facebook, Inc. Menlo Park, CA. Core Data Science -- Economic Research Team, Statistics and Decision Science Team. Mentor: Eytan Bakshy. Static Analysis for the PlanOut DSL. \\
-
-		{\bf Research Assistant}. September 2011 -- January 2013. University of Massachusetts, Amherst. CI Lab, Advisor : Lee Spector. Researched new metrics for evaluating parameters of evolutionary
-search based on techniques from nonparametric statistics.\\
-
-		{\bf Visiting Researcher}. June 2010 -- August 2010. Institute for Creative Technologies. Playa Vista, CA. Supervisor : Ron Artstein. Augmented and evaluated a natural language generation and
-question-answering system for virtual humans.
+\cvsec{Research Experience}{
+  \begin{description}[leftmargin=1cm]
+  \item[Research Assistant.] June 2013 -- January 2017. University of Massachusetts, Amherst. PLASMA Lab, Advisor : Emery Berger. Developed a domain specific programming language and runtime system to design, debug, and deploy scientific surveys on the web, at scale.
+  \item[Research Intern.] June 2015 -- August 2015. Facebook, Inc. Menlo Park, CA. Core Data Science -- Economic Research Team, Statistics and Decision Science Team. Mentor: Eytan Bakshy. Static Analysis for the PlanOut DSL. 
+  \item[Research Assistant.] September 2011 -- January 2013. University of Massachusetts, Amherst. CI Lab, Advisor : Lee Spector. Researched new metrics for evaluating parameters of evolutionary search based on techniques from nonparametric statistics.
+  \item[Visiting Researcher.] June 2010 -- August 2010. Institute for Creative Technologies. Playa Vista, CA. Supervisor : Ron Artstein. Augmented and evaluated a natural language generation and question-answering system for virtual humans.
+\end{description}
 }
 
 \cvsec{Publications}{
-%%  {\bf E. Tosch}, E. Bakshy, E. Berger. DoE-Check: Ensuring the Correctness of Online Experiments. \emph{In Submission}.\\
-		E. Bakshy, {\bf E. Tosch}. Formal Verification and Automated Causal Inference for Internet-Scale Experiments. CODE@MIT 2015.\\
-		
-        {\bf E. Tosch}, E. Berger. SurveyMan: Programming and Debugging Surveys at Scale. \emph{Proceedings of the 2014 ACM International Conference on Object Oriented Programming Systems Languages and Applications}. ACM New York, NY, USA. 2014. {\bf Best Paper Award.}\\
-        
-        {\bf E. Tosch}, E. Berger. Programming and Debugging Surveys. POPL OBT Workshop 2014.\\
-      
-		{\bf E. Tosch}, L. Spector. Achieving COSMOS: A metric for determining when to give up and when to reach for the stars. \emph{Proceedings of the 14th Intl. Conf. on Genetic and Evolutionary Computation Conference Companion}. ACM New York, NY, USA. 2012.\\
-	K. Harrington, {\bf E. Tosch}, L. Spector, J. Pollack. Compositional Autoconstructive Dynamics \emph{Proc. of the 8th Intl. Conf. on Complex Systems}. 2011.\\
-	
-	G. Chen, {\bf E. Tosch}, R. Artstein, A. Leuski, D. Traum. Evaluating Conversational Characters Created through Question Generation. FLAIRS Conference. 2011.
+\hangindent=1cm E. Bakshy, {\bf E. Tosch}. Formal Verification and Automated Causal Inference for Internet-Scale Experiments. CODE@MIT 2015.
+
+\hangindent=1cm {\bf E. Tosch}, E. Berger. SurveyMan: Programming and Debugging Surveys at Scale. \emph{Proceedings of the 2014 ACM International Conference on Object Oriented Programming Systems Languages and Applications}. ACM New York, NY, USA. 2014. {\bf Best Paper Award.}
+
+\hangindent=1cm {\bf E. Tosch}, E. Berger. Programming and Debugging Surveys. POPL OBT Workshop 2014.
+
+\hangindent=1cm {\bf E. Tosch}, L. Spector. Achieving COSMOS: A metric for determining when to give up and when to reach for the stars. \emph{Proceedings of the 14th Intl. Conf. on Genetic and Evolutionary Computation Conference Companion}. ACM New York, NY, USA. 2012.
+
+\hangindent=1cm K. Harrington, {\bf E. Tosch}, L. Spector, J. Pollack. Compositional Autoconstructive Dynamics \emph{Proc. of the 8th Intl. Conf. on Complex Systems}. 2011.
+
+\hangindent=1cm G. Chen, {\bf E. Tosch}, R. Artstein, A. Leuski, D. Traum. Evaluating Conversational Characters Created through Question Generation. FLAIRS Conference. 2011.
 }
 
-\cvsec{Teaching \newline Experience}{
-{\bf Teaching Assistant}. Reasoning Under Uncertainty (Undergraduate), University of Massachusetts, Amherst. Prof. Andrew McGregor. Spring 2017.\\
-{\bf Mentor}. REUMass '16. Mentoring an undergraduate (Rosario Huamani Carpio, Pomona College '18). Summer 2016. \\
-{\bf Mentor}. Google Summer of Code. Official mentor for a GSoC student (Prakhar Srivastav) working on a SurveyMan graphical interface. Summer 2015.\\
-        {\bf Mentor}. UMass Amherst. Mentoring an undergraduate (Molly McMahon) for a summer REU and an independent study with Emery Berger. Summer 2013, Spring 2014.\\
-		{\bf  Teaching Assistant}. Reasoning Under Uncertainty (Undergraduate), University of Massachusetts, Amherst. Prof. Andrew McGregor. Spring 2013.\\
-		{\bf Teaching Assistant, Guest Lecturer}. Intro. to Theory of Computation (Undergraduate), Brandeis University. Antonella DiLillo. Spring 2011.\\
-		{\bf Teaching Assistant}. Structure and Interpretation of Computer Programs (Undergraduate), Brandeis University. Prof. Harry Mairson. Fall 2010.\\
-		{\bf Teaching Assistant}. Data Structures (Undergraduate), Brandeis University. Antonella DiLillo. Spring 2010.\\
-		{\bf Volunteer}. Cahners Computer Place, Museum of Science, Boston. Oct. 2009 -- May 2010, Sep. 2010 -- May 2011
+\cvsec{Teaching Experience}{
+  \begin{description}[leftmargin=1cm]
+    \item[Teaching Assistant.] Advanced Logic (Upper Undergraduate/Graduate), University of Massachusetts, Amherst. Prof. Neil Immerman. Fall 2017.
+    \item[Teaching Assistant, Guest Lecturer]. Reasoning Under Uncertainty (Undergraduate), University of Massachusetts, Amherst. Prof. Andrew McGregor. Spring 2017.
+    \item[Mentor.] REUMass '16. Mentoring an undergraduate (Rosario Huamani Carpio, Pomona College '18). Summer 2016.
+    \item[Mentor.] Google Summer of Code. Official mentor for a GSoC student (Prakhar Srivastav) working on a SurveyMan graphical interface. Summer 2015.
+    \item[Mentor.] UMass Amherst. Mentoring an undergraduate (Molly McMahon) for a summer REU and an independent study with Emery Berger. Summer 2013, Spring 2014.
+    \item[Teaching Assistant.] Reasoning Under Uncertainty (Undergraduate), University of Massachusetts, Amherst. Prof. Andrew McGregor. Spring 2013.
+    \item[Teaching Assistant, Guest Lecturer.] Intro. to Theory of Computation (Undergraduate), Brandeis University. Antonella DiLillo. Spring 2011.
+    \item[Teaching Assistant.] Structure and Interpretation of Computer Programs (Undergraduate), Brandeis University. Prof. Harry Mairson. Fall 2010.
+    \item[Teaching Assistant.] Data Structures (Undergraduate), Brandeis University. Antonella DiLillo. Spring 2010.
+    \item[Volunteer.] Cahners Computer Place, Museum of Science, Boston. Oct. 2009 -- May 2010, Sep. 2010 -- May 2011
+  \end{description}
 }
 
 \renewcommand{\arraystretch}{1}
@@ -109,95 +101,94 @@ Fall 2015.  CIRTL Course.  Diversity in College Classroom:  Teaching the STEM Un
 }
 
 \cvsec{%Relevant \newline
- Work \newline Experience}{
-  {\bf Software Engineering Intern}. Sept. 2014 -- Dec. 2014. Google, Inc. Mountain View, CA.\\
-  {\bf Data Warehouse Analyst}. March 2008 -- May 2009. Recombinant Data Corp. Newton, MA.\\
+ Work Experience}{
+\begin{description}
+\item[Project Assistant.] May 2017 -- Aug. 2017. UMass, Prof. Charles Weems. Amherst, MA.
+\item[Software Engineering Intern.] Sept. 2014 -- Dec. 2014. Google, Inc. Mountain View, CA.
+\item[Data Warehouse Analyst.] March 2008 -- May 2009. Recombinant Data Corp. Newton, MA.
 %  {\bf Usher}. September 2006 -- May 2008. American Repertory Theater. Cambridge, MA.\\ % comment this out later
-  {\bf Assistant Loan Processor}. June 2005 -- October 2006. Hoffman Companies. Brookline, MA.\\
+\item[Assistant Loan Processor.] June 2005 -- October 2006. Hoffman Companies. Brookline, MA.
 %  {\bf Clerk}. May 2006 -- August 2006. Lulu's Bakery. Boston, MA.\\ % comment this out later
 %  {\bf Laborer}. January 2006 -- May 2006. Natick Community Organic Farm. Natick, MA.\\ % comment this out later
-  {\bf Intern}. June 2004 -- August 2004. New Jersey Division of Law and Public Service. Trenton, NJ.\\
+\item[Intern.] June 2004 -- August 2004. New Jersey Division of Law and Public Service. Trenton, NJ.
 %  {\bf Clerk}. June 2002 -- April 2003. Wawa (Convenience Store). Hamilton, NJ.\\ % comment this out later
+\end{description}
 }
 
-\cvsec{Talks and \newline Presentations}{
-	\emph{Programming Languages and Experimentation}.\\
-	\begin{tabular}{l}
-          9 December 2016. Wellesley College. Invited talk. Wellesley, MA. \\
-	  31 May 2016. NEPLS Spring 2016. Amherst, MA.\\
-	  17 October 2015. CODE@MIT. Poster Presentation. Cambridge, MA.
-	\end{tabular}
-\newline\\
-	
-    \emph{Programming and Debugging Surveys}.\\
-    \begin{tabular}{l}
-      8 November 2016. SPLASH-I. Invited Talk. Amsterdam, Netherlands.\\
-      1 October 2015. Union College. Invited Talk. Schenectady, NY.\\
-    13 May 2015. Google, Inc. Invited Talk. Cambridge, MA.\\
-    9 April 2015. Center for Data Science launch symposium. Poster session. Amherst, MA.\\
-    22 October 2014. OOPSLA 2014. Oral Presentation (full). Portland, OR.\\
-    11 June 2014. PLDI Student Research Competition. Poster session \& short talk. Edinburgh, Scotland.\\
-    11 April 2014. CRA-W Graduate Cohort Workshop. Poster session. Santa Clara, CA.\\
-    12 March 2014. UMass CS Women. Oral presentation. Amherst, MA.\\
-    31 January 2014. Google PhD Summit. Lightning talk. Cambridge, MA.\\
-    25 January 2014. POPL OBT Workshop. Oral presentation (full). San Diego, CA.\\
-    \end{tabular}    
-    \newline\\
-	
-	\emph{Programming Language Research and Social Science}.\\
-	\begin{tabular}{l}
-	  30 June 2016. REUMass Summer `16 Lunch Series. Amherst, MA.\\
-	\end{tabular}
-	\newline\\
-
-        \emph{Achieving COSMOS}.\\
-    \begin{tabular}{l}
-    7 July 2012. GECCO UP Workshop. Oral presentation (full). Philadelphia, PA.
-    \end{tabular}
-    \newline\\
-	
-    \emph{Women in Computing}.\\
-    \begin{tabular}{l}
-    	24 April 2015. MassMutual Women in Technology Conference. \emph{Inspiring Women in Technology} Panelist.
-    \end{tabular}
+\cvsec{Talks and Presentations}{
+  \emph{Programming Languages and Experimentation}.
+    \begin{description}
+      \item[Invited talk.] Wellesley College. 9 December 2016. Wellesley, MA.
+      \item[Oral presentation (full).] NEPLS Spring 2016. 31 May 2016. Amherst, MA.
+      \item[Poster presentation.] CODE@MIT. 17 October 2015. Cambridge, MA.
+    \end{description}
+    \vspace{10pt}
+    \emph{Programming and Debugging Surveys}.
+    \begin{description}
+      \item[Invited talk.] SPLASH-I. 8 November 2016. Amsterdam, Netherlands.
+      \item[Invited talk.] Union College. 1 October 2015. Schenectady, NY.
+      \item[Invited talk.] Google, Inc. 13 May 2015. Cambridge, MA.
+      \item[Poster presentation.] UMass Center for Data Science launch symposium. 9 April 2015. Amherst, MA.
+      \item[Oral pressentation (full).] OOPSLA 2014. 22 October 2014. Portland, OR.
+      \item[Oral presentation (short).] PLDI Student Research Competition. 11 June 2014. Edinburgh, Scotland.
+      \item[Poster presentation.] CRA-W Graduate Cohort Workshop. 11 April 2014. Santa Clara, CA.
+      \item[Oral presentation.] UMass CS Women. 12 March 2014. Amherst, MA.
+      \item[Lightning talk.] Google PhD Summit. 31 January 2014. Cambridge, MA.
+      \item[Oral presentation (full).]  POPL OBT Workshop. 25 January 2014. San Diego, CA.
+    \end{description}
+    \vspace{10pt}
+    \emph{Programming Language Research and Social Science}.
+    \begin{description}
+      \item[Oral presentation.] REUMass Summer `16 Lunch Series. 30 June 2016.  Amherst, MA.
+    \end{description}
+    \vspace{10pt}
+    \emph{Achieving COSMOS}.
+    \begin{description}
+    \item[Oral presentation (full).]  GECCO UP Workshop. 7 July 2012. Philadelphia, PA.
+    \end{description}
+    \vspace{10pt}
+    \emph{Women in Computing}.
+    \begin{description}
+    \item[Panelist.]  MassMutual Women in Technology Conference. 24 April 2015. Springfield, MA.
+    \end{description}
 }
 
 
-\cvsec{Professional \newline Activities \newline \& Service}{
-		CICS Graduate Representative. January 2016 -- January 2017.\\
-		Student Volunteer, PLDI 2016. June 2016. \\
-		UMass CS Women. Webmaster. June 2016 -- present.\\
-		UMass CS Women. Treasurer. January 2016 -- May 2016.\\
-		UMass CS Women. Co-Chair. January 2015 -- January 2016.\\
-		PLDI External Review Committee.  Member.  2016.\\
-		ECOOP External Review Committee.  Member.  2016.\\
-		POPL OBT Workshop Program Committee.  Member.  2016.\\
-		WPI STEM Faculty Launch.  Participant.  September 2015.\\
-		ACM-W Early Career Mentoring Workshop.  Participant.  June 2015.\\
-		Program Comittee Member. ECOOP DSLDI Workshop 2016. \\
-		Artifact Evaluation Reviewer. PLDI 2016. \\
-		Computer Science Graduate Admissions Committee. Reviewer. December 2014 -- February 2015.\\
-		NCWIT Aspirations Scholarship Reviewer. November 2014. \\
-        Artifact Evaluation Committee. Reviewer. POPL 2015.\\
-        Student Volunteer, SPLASH 2014. October 2014.\\
-		Graduate Employee Organization, UAW 2322. Steward. September 2011 -- May 2014.\\
-		NSF REU Graduate Student Mentor. Summer 2013.\\
-		Oregon Programming Languages Summer School. Attendee. July -- August 2013.	\\
-		Brandeis University Women in Computing (for Undergraduates). Founder. April 2010 -- May 2011. 
+\cvsec{Professional Activities and Service}{
+  CICS Graduate Representative. January 2016 -- January 2017.\\
+  Student Volunteer, PLDI 2016. June 2016. \\
+  UMass CS Women. Webmaster. June 2016 -- January 2017.\\
+  UMass CS Women. Treasurer. January 2016 -- May 2016.\\
+  UMass CS Women. Co-Chair. January 2015 -- January 2016.\\
+  PLDI External Review Committee.  Member.  2016.\\
+  ECOOP External Review Committee.  Member.  2016.\\
+  POPL OBT Workshop Program Committee.  Member.  2016.\\
+  WPI STEM Faculty Launch.  Participant.  September 2015.\\
+  ACM-W Early Career Mentoring Workshop.  Participant.  June 2015.\\
+  Program Comittee Member. ECOOP DSLDI Workshop 2016. \\
+  Artifact Evaluation Reviewer. PLDI 2016. \\
+  Computer Science Graduate Admissions Committee. Reviewer. December 2014 -- February 2015.\\
+  NCWIT Aspirations Scholarship Reviewer. November 2014. \\
+  Artifact Evaluation Committee. Reviewer. POPL 2015.\\
+  Student Volunteer, SPLASH 2014. October 2014.\\
+  Graduate Employee Organization, UAW 2322. Steward. September 2011 -- May 2014.\\
+  NSF REU Graduate Student Mentor. Summer 2013.\\
+  Oregon Programming Languages Summer School. Attendee. July -- August 2013.	\\
+  Brandeis University Women in Computing (for Undergraduates). Founder. April 2010 -- May 2011. 
 }
 
 
-\cvsec{Honors, \newline Scholarships, \newline and Awards}{
-2015 WPI STEM Faculty Launch participant and travel grant.\\
-2015 NCWIT Symantec Student Seed Funding (for UMass CS Women)\\
-2015 UMass Amherst School of Computer Science Outstanding Synthesis Award\\
-2014 OOPSLA Best Paper Award\\
-2014 PLDI ACM Student Research Competition (1st Place)\\
-2013 Future of Software Engineering Symposium Scholarship at Microsoft Research\\
-2013 Programming Languages Mentoring Workshop Scholarship\\
-2012 ACM-W conference scholarship (attended SIG-EVO)\\
-2010 Grace Hopper Celebration of Women in Computing Scholarship\\
-2005 Humanities Foundation Award in English Literature\\
+\cvsec{Honors, Scholarships, and Awards}{
+  2015 WPI STEM Faculty Launch participant and travel grant.\\
+  2015 NCWIT Symantec Student Seed Funding (for UMass CS Women)\\
+  2015 UMass Amherst School of Computer Science Outstanding Synthesis Award\\
+  2014 OOPSLA Best Paper Award\\
+  2014 PLDI ACM Student Research Competition (1st Place)\\
+  2013 Future of Software Engineering Symposium Scholarship at Microsoft Research\\
+  2013 Programming Languages Mentoring Workshop Scholarship\\
+  2012 ACM-W conference scholarship (attended SIG-EVO)\\
+  2010 Grace Hopper Celebration of Women in Computing Scholarship\\
+  2005 Humanities Foundation Award in English Literature\\
 }
 
 \end{document}
