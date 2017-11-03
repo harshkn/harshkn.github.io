@@ -7,3 +7,6 @@ _posts/.*#.*
 *~
 .DS_Store
 .texpadtmp
+cv.aux
+cv.log
+_includes/ocaml_module_oasis_example/_build

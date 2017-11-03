@@ -1,0 +1,49 @@
+digraph po_lib {
+  aux -> ast ;
+  ddg -> ast;
+  eval -> ast;
+  format -> ast;
+  norm -> ast;
+  parse -> ast;
+  syntax -> ast;
+
+  env -> aux;
+  syntax -> aux; 
+
+  aux -> ddg;
+  env -> ddg;
+  syntax -> ddg;
+
+  syntax -> env ;
+
+  aux -> eval ;
+  env -> eval;
+  syntax -> eval;
+
+  aux -> format;
+  kwd -> format;
+  syntax -> format;
+
+  aux -> norm;
+  counts -> norm;
+  env -> norm;
+  eval -> norm;
+  format -> norm;
+  parse -> norm;
+  syntax -> norm;
+
+  aux -> parse ;
+  env -> parse;
+  kwd -> parse;
+  syntax -> parse;
+
+  basetypes -> syntax;
+
+  aux -> tform;
+  ddg -> tform;
+  env -> tform;
+  eval -> tform ;
+  format -> tform ;
+  norm -> tform ;
+  syntax -> tform 
+}

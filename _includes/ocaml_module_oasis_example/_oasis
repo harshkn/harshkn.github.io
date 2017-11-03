@@ -1,0 +1,21 @@
+OASISFormat: 0.4
+Name:        ocaml_module_oasis_example
+Plugins:      Meta (0.4), DevFiles (0.4)
+Version:     0.1
+Synopsis:    Makes a point about modules
+Authors:     Emma Tosch
+License:     MIT
+
+Library some_lib
+  Path:       some_lib
+  BuildTools: ocamlbuild
+  Modules:    A3,
+              B
+
+Executable main
+  Path:       .
+  BuildTools: ocamlbuild
+  CompiledObject: best
+  MainIs:     main.ml
+  BuildDepends:
+    some_lib
