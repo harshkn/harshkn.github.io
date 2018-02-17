@@ -16,3 +16,7 @@ gems:
 - jekyll-paginate
 - jekyll-mentions
 - jekyll-gist
+
+collections:
+  teaching:
+    output: true

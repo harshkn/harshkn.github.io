@@ -2,6 +2,7 @@
 layout: page
 title: About
 permalink: /bio.html
+header: true 
 ---
 
 ![Emma Tosch](headshot.jpg){:style="width: 30%; float: left; border: solid; margin: 0 10px 0 0;"}

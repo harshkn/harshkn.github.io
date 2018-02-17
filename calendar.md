@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Calendar
+header: true 
 ---
 
 I'm always happy to meet people for lunch to talk about research, [our women's group in CICS](http://cics.umass.edu/~women), grad school, or almost anything else. Feel free to send me a calendar invite if you're interested in meeting up!
