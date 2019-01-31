@@ -1,8 +1,0 @@
----
----
-
-start with something about running into matt hammer at pldi 2016
-
-building the survey in the UI can be modeled using incremetnal computation
-we had previously been working under the model that the user specifies the complete survey in, e.g., a csv, and then uses the SurveyMan static analyzer to ensure correctness. however, when we allow users to build up a survey using a library such as the java api or the python library, we are in a different position: users may pass through non-well-formed states between well-formed states.
-
