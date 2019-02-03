@@ -19,7 +19,7 @@ var x,
 
 var color = d3.scale.category10();
 
-var svg = d3.select("d3-test").append("svg")
+var svg = d3.select("#d3-test").append("svg")
     .attr("width", w + m[1] + m[3])
     .attr("height", h + m[0] + m[2])
   .append("g")
