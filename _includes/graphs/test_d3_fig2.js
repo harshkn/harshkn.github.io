@@ -1,7 +1,7 @@
 svg {
   font-family: "Helvetica Neue", Helvetica;
 }
-
+$(document).ready(function(){
 .line {
   fill: none;
   stroke: #000;
@@ -566,5 +566,4 @@ function donutExplode() {
     lines();
   }, duration);
 }
-
-</script>
+}
