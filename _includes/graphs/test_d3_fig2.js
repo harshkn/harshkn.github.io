@@ -1,12 +1,3 @@
-svg {
-  font-family: "Helvetica Neue", Helvetica;
-}
-
-.line {
-  fill: none;
-  stroke: #000;
-  stroke-width: 2px;
-}
 
 var m = [20, 20, 30, 20],
     w = 960 - m[1] - m[3],
