@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Test Post
-permalink: test_post.html
+permalink: feed_check.html
 comments: true
 type: post
 author:
